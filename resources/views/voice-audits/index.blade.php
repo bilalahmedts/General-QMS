@@ -27,9 +27,10 @@
         <input type="hidden" name="search" value="1">
         @php
             
-            $user_id = -1;
-            $associate_id = -1;
-            $campaign_id = -1;
+            $user_id = '';
+            $associate_id = '';
+            $campaign_id = '';
+            $project_id = '';
             $outcome = '';
             $review = '';
             $from_date = '';
@@ -41,16 +42,30 @@
                 $user_id = @$_GET['user_id'];
                 $associate_id = @$_GET['associate_id'];
                 $campaign_id = @$_GET['campaign_id'];
+                $project_id = @$_GET['project_id'];
                 $outcome = @$_GET['outcome'];
                 $review = @$_GET['review'];
-            
-                if (!empty(@$_GET['from_date'])) {
-                    $from_date = @$_GET['from_date'];
+                if (!empty(@$_GET['user_id'])) {
+                    $user_id = @$_GET['user_id'];
+                }
+                if (!empty(@$_GET['associate_id'])) {
+                    $associate_id = @$_GET['associate_id'];
+                }
+                if (!empty(@$_GET['campaign_id'])) {
+                    $campaign_id = @$_GET['campaign_id'];
+                }
+                if (!empty(@$_GET['project_id'])) {
+                    $project_id = @$_GET['project_id'];
+                }
+                if (!empty(@$_GET['outcome'])) {
+                    $outcome = @$_GET['outcome'];
+                }
+                if (!empty(@$_GET['review'])) {
+                    $review = @$_GET['review'];
                 }
                 if (!empty(@$_GET['to_date'])) {
                     $to_date = @$_GET['to_date'];
                 }
-            
                 if (!empty(@$_GET['from_time'])) {
                     $from_time = @$_GET['from_time'];
                 }
@@ -58,7 +73,6 @@
                     $to_time = @$_GET['to_time'];
                 }
             }
-            
         @endphp
 
         <div class="card card-primary card-outline mt-3" id="search"
@@ -66,20 +80,6 @@
             <div class="card-body">
                 <div class="row">
 
-
-
-                    <div class="form-group col-md-4">
-                        <label for="">Select Evaluator</label>
-                        <select name="user_id" class="form-control select2">
-                            <option value="-1">Select Option</option>
-                            @foreach ($users as $user)
-                                @if ($user->campaign_id == 139)
-                                    <option value="{{ $user->id }}" @if ($user->id == $user_id) selected @endif>
-                                        {{ $user->name }}</option>
-                                @endif
-                            @endforeach
-                        </select>
-                    </div>
 
                     <div class="form-group col-md-4">
                         <label for="">Select Associate</label>
@@ -102,21 +102,35 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="form-group col-md-4">
+                        <label for="">Select Project</label>
+                        <select name="project_id" class="form-control select2">
+                            <option value="-1">Select Option</option>
+                            @foreach ($projects as $project)
+                                <option value="{{ $project->id }}" @if ($project->id == $project_id) selected @endif>
+                                    {{ $project->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
+                    <div class="form-group col-md-4">
+                        <label for="">Select Evaluator</label>
+                        <select name="user_id" class="form-control select2">
+                            <option value="-1">Select Option</option>
+                            @foreach ($users as $user)
+                                @if ($user->campaign_id == 139)
+                                    <option value="{{ $user->id }}" @if ($user->id == $user_id) selected @endif>
+                                        {{ $user->name }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="form-group col-md-4">
                         <label for="">Select Outcome</label>
                         <select name="outcome" class="form-control select2">
                             <option value="">Select</option>
                             <option value="accepted" @if ($outcome == 'accepted') selected @endif>Accepted</option>
                             <option value="rejected" @if ($outcome == 'rejected') selected @endif>Rejected</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group col-md-4">
-                        <label for="">Select Review Status</label>
-                        <select name="review" class="form-control select2">
-                            <option value="">Select</option>
-                            <option value="pending" @if ($review == 'pending') selected @endif>Pending</option>
                         </select>
                     </div>
 
@@ -131,8 +145,6 @@
                         <input type="text" class="form-control datetimepicker-input datepicker2" name="to_date"
                             value="{{ $to_date }}" data-toggle="datetimepicker" data-target=".datepicker2" />
                     </div>
-
-                    <div class="form-group col-md-4"></div>
 
                     <div class="form-group col-md-4">
                         <label for="">From Time</label>
@@ -175,9 +187,9 @@
             @endif --}}
             @if ($voice_evaluation)
                 <div class="card-tools">
-                    @if ((in_array(Auth::user()->roles[0]->name, ['Team Lead', 'Manager', 'Associate']) &&
-                        Auth::user()->campaign_id == 1) ||
-                        in_array(Auth::user()->roles[0]->name, ['Super Admin']))
+                    @if (
+                        (in_array(Auth::user()->roles[0]->name, ['Team Lead', 'Manager', 'Associate']) && Auth::user()->campaign_id == 1) ||
+                            in_array(Auth::user()->roles[0]->name, ['Super Admin']))
                         <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-audit"
                             data-controls-modal="#modal-audit" data-backdrop="static" data-keyboard="false">
                             <i class="fas fa-plus"></i> Start Audit
@@ -194,9 +206,11 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <td>#</td>
+                        <th>#</th>
                         <th>@sortablelink('user_id', 'Evaluator')</th>
                         <th>@sortablelink('associate_id', 'Associate')</th>
+                        <th>@sortablelink('campaign_id', 'Campaign')</th>
+                        <th>@sortablelink('project_id', 'Project')</th>
                         <th>Evaluation Time</th>
                         <th>Call Time</th>
                         <th>Result</th>
@@ -216,10 +230,9 @@
                             <tr>
                                 <td>{{ $voice_audits->firstItem() + $key }}</td>
                                 <td>{{ $audit->user->name ?? 'undefined' }}</td>
-                                <td>
-                                    {{ $audit->associate->name ?? 'undefined' }}
-                                    <br>({{ $audit->campaign->name ?? 'undefined' }})
-                                </td>
+                                <td>{{ $audit->associate->name ?? 'undefined' }}</td>
+                                <td>{{ $audit->campaign->name ?? 'undefined' }}</td>
+                                <td>{{ $audit->project->name ?? '' }}</td>
                                 <td>{{ $audit->evaluation_time }}</td>
                                 <td>{{ $audit->recording_duration }}</td>
                                 <td>{{ $audit->percentage }}%</td>
@@ -253,9 +266,10 @@
                                 <td class="action">
                                     <a href="{{ route('voice-audits.show', $audit) }}" class="btn btn-success btn-sm"><i
                                             class="fas fa-eye"></i></a>
-                                    @if ((in_array(Auth::user()->roles[0]->name, ['Director', 'Team Lead', 'Manager', 'Associate']) &&
-                                        Auth::user()->campaign_id == 139) ||
-                                        in_array(Auth::user()->roles[0]->name, ['Super Admin']))
+                                    @if (
+                                        (in_array(Auth::user()->roles[0]->name, ['Director', 'Team Lead', 'Manager', 'Associate']) &&
+                                            Auth::user()->campaign_id == 139) ||
+                                            in_array(Auth::user()->roles[0]->name, ['Super Admin']))
                                         @php
                                             $access = true;
                                             if (Auth::user()->roles[0]->name == 'Associate' && $audit->user_id == Auth::user()->id) {

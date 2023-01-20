@@ -71,8 +71,8 @@ class VoiceAuditController extends Controller
         $campaigns = Campaign::where('status', 'active')
             ->orderBy('name', 'asc')
             ->get();
-
-        return view('voice-audits.index')->with(compact('voice_evaluation', 'voice_audits', 'users', 'campaigns'));
+        $projects = Project::orderBy('name', 'asc')->get();
+        return view('voice-audits.index')->with(compact('voice_evaluation', 'voice_audits', 'users', 'campaigns', 'projects'));
     }
 
     public function create(Request $request, VoiceEvaluation $voice_evaluation)
@@ -81,7 +81,7 @@ class VoiceAuditController extends Controller
         $project = Project::findOrFail($request->project_id);
         $users = User::where('campaign_id', $request->campaign_id)
             ->where('project_id', $request->project_id)
-            ->where('status','active')
+            ->where('status', 'active')
             ->orderBy('name', 'asc')
             ->get();
         $categories = DatapointCategory::where('voice_evaluation_id', $voice_evaluation->id)

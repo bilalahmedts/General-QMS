@@ -16,6 +16,10 @@
         <td>{{ $voice_audit->campaign->name ?? '' }}</td>
     </tr>
     <tr>
+        <th>Project</th>
+        <td>{{ $voice_audit->project->name ?? '' }}</td>
+    </tr>
+    <tr>
         <th>Customer</th>
         <td>{{ $voice_audit->customer_name ?? '' }}</td>
     </tr>
@@ -37,23 +41,26 @@
             <span class="badge bg-success">Good</span>
         @elseif ($voice_audit->rating == 'above average')
             <span class="badge bg-primary">Above Average</span>
-            @elseif ($voice_audit->rating == 'average')
+        @elseif ($voice_audit->rating == 'average')
             <span class="badge bg-info">Average</span>
-            @elseif ($voice_audit->rating == 'bad')
+        @elseif ($voice_audit->rating == 'bad')
             <span class="badge bg-warning">Bad</span>
-            @elseif ($voice_audit->rating == 'fatal')
+        @elseif ($voice_audit->rating == 'fatal')
             <span class="badge bg-danger">fatal</span>
-            @else
+        @else
             <span class="badge bg-secondary">Other</span>
         @endif
     </td>
     <tr>
         <th>Outcome</th>
         <td>
-            @if($voice_audit->outcome == 'accepted')
+            @if ($voice_audit->outcome == 'accepted')
                 <span class="badge bg-success">Accepted</span>
             @else
-                <span class="badge bg-danger">Rejected @if($voice_audit->review_priority == 1) / Critical @endif</span>
+                <span class="badge bg-danger">Rejected @if ($voice_audit->review_priority == 1)
+                        / Critical
+                    @endif
+                </span>
             @endif
         </td>
     </tr>
@@ -79,32 +86,33 @@
             {{ $voice_audit->notes ?? '' }}
         </td>
     </tr>
-    @if($voice_audit->appeal)
-    <tr>
-        <td colspan="2">
-            <strong>Appeal Remarks</strong><br>
-            {{ $voice_audit->appeal->remarks ?? '' }}
-        </td>
-    </tr>
+    @if ($voice_audit->appeal)
+        <tr>
+            <td colspan="2">
+                <strong>Appeal Remarks</strong><br>
+                {{ $voice_audit->appeal->remarks ?? '' }}
+            </td>
+        </tr>
     @endif
 
-    @if($voice_audit->action)
-    <tr>
-        <th>Action</th>
-        <td>{{ $voice_audit->action->action->name }}</td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <strong>Action Remarks</strong><br>
-            {{ $voice_audit->action->remarks ?? '' }}
-        </td>
-    </tr>
+    @if ($voice_audit->action)
+        <tr>
+            <th>Action</th>
+            <td>{{ $voice_audit->action->action->name }}</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <strong>Action Remarks</strong><br>
+                {{ $voice_audit->action->remarks ?? '' }}
+            </td>
+        </tr>
     @endif
     <tr>
         <td colspan="2">
             <strong>Call Recording</strong><br><br>
             <audio controls style="width: 100%;">
-                <source src="https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3" type="audio/mpeg">
+                <source src="https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3"
+                    type="audio/mpeg">
             </audio>
             <br>
             {{ $voice_audit->recording_link ?? '' }}
