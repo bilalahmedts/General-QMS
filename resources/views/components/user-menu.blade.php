@@ -14,7 +14,7 @@
 
         <li class="nav-header">VOICE AUDITS</li>
 
-        @if (in_array(Auth::user()->roles[0]->name, ['Super Admin', 'Director']) || Auth::user()->campaign_id == 139)
+        @if (in_array(Auth::user()->roles[0]->name, ['Super Admin', 'Director']) || Auth::user()->campaign_id == 1)
             <li class="nav-item">
                 <a href="{{ route('voice-audits.index', 1) }}"
                     class="nav-link {{ request()->is('voice-audits/1', 'voice-audits/1/*') ? 'active' : '' }}">
@@ -47,7 +47,7 @@
         @endif
 
         @if (in_array(Auth::user()->roles[0]->name, ['Super Admin', 'Director', 'Team Lead', 'Manager', 'Associate']) &&
-            Auth::user()->campaign_id != 139)
+            Auth::user()->campaign_id != 1)
 
             @if (Auth::user()->roles[0]->name == 'Associate')
                 <li class="nav-item">
@@ -106,7 +106,7 @@
         @endif
 
         @if (in_array(Auth::user()->roles[0]->name, ['Super Admin', 'Director']) ||
-            (in_array(Auth::user()->roles[0]->name, ['Manager', 'Team Lead']) && Auth::user()->campaign_id == 139))
+            (in_array(Auth::user()->roles[0]->name, ['Manager', 'Team Lead']) && Auth::user()->campaign_id == 1))
             <li class="nav-header">VOICE REPORTS</li>
 
             <li class="nav-item">
@@ -158,7 +158,7 @@
             </li>
         @endif
         @if (in_array(Auth::user()->roles[0]->name, ['Super Admin', 'Director']) ||
-            (in_array(Auth::user()->roles[0]->name, ['Manager', 'Team Lead']) && Auth::user()->campaign_id == 139))
+            (in_array(Auth::user()->roles[0]->name, ['Manager', 'Team Lead']) && Auth::user()->campaign_id == 1))
             <li class="nav-header">SOLAR LT</li>
 
             <li class="nav-item">
@@ -179,7 +179,7 @@
             </li>
         @endif
 
-        @if (in_array(Auth::user()->roles[0]->name, ['Super Admin', 'Director']))
+        @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']))
 
             <li class="nav-header">SETTINGS</li>
 

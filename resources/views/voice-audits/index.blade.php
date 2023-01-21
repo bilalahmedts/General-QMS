@@ -118,7 +118,7 @@
                         <select name="user_id" class="form-control select2">
                             <option value="-1">Select Option</option>
                             @foreach ($users as $user)
-                                @if ($user->campaign_id == 139)
+                                @if ($user->campaign_id == 1)
                                     <option value="{{ $user->id }}" @if ($user->id == $user_id) selected @endif>
                                         {{ $user->name }}</option>
                                 @endif
@@ -177,14 +177,7 @@
     <div class="card card-primary card-outline">
         <div class="card-header">
             <h3 class="card-title">{{ $voice_evaluation->name ?? 'Voice Audits' }} List</h3>
-            {{-- @if ($voice_evaluation)
-                <div class="card-tools">
-                    <a href="{{ route('export.voice-audits') }}?user_id={{ $user_id }}&associate_id={{ $associate_id }}&campaign_id={{ $campaign_id }}&outcome={{ $outcome }}&review={{ $review }}&from_date={{ $from_date }}&to_date={{ $to_date }}&from_time={{ $from_time }}&to_time={{ $to_time }}"
-                        class="btn btn-success btn-sm ml-2" onclick="return confirm('Are you sure?')">Export Report</a>
-                    <a href="{{ route('voice-audits.create', $voice_evaluation) }}"
-                        class="btn btn-primary btn-sm ml-2"><i class="fas fa-plus"></i>Start Audit</a>
-                </div>
-            @endif --}}
+            
             @if ($voice_evaluation)
                 <div class="card-tools">
                     @if (
@@ -268,7 +261,7 @@
                                             class="fas fa-eye"></i></a>
                                     @if (
                                         (in_array(Auth::user()->roles[0]->name, ['Director', 'Team Lead', 'Manager', 'Associate']) &&
-                                            Auth::user()->campaign_id == 139) ||
+                                            Auth::user()->campaign_id == 1) ||
                                             in_array(Auth::user()->roles[0]->name, ['Super Admin']))
                                         @php
                                             $access = true;

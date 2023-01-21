@@ -91,7 +91,7 @@ class VoiceAuditService
     public function auditShowAccess()
     {
         $access = false;
-        if (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead', 'Associate']) && Auth::user()->campaign_id == 4) {
+        if (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead', 'Associate']) && Auth::user()->campaign_id == 1) {
             $access = true;
         } elseif (in_array(Auth::user()->roles[0]->name, ['Super Admin', 'Director'])) {
             $access = true;
@@ -107,7 +107,7 @@ class VoiceAuditService
     public function auditEditAccess($voice_audit)
     {
         $access = false;
-        if (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead', 'Associate']) && Auth::user()->campaign_id == 4) {
+        if (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead', 'Associate']) && Auth::user()->campaign_id == 1) {
             if (Auth::user()->roles[0]->name == 'Associate' && $voice_audit->user_id == Auth::user()->id) {
                 $diff = $voice_audit->created_at->diffInHours(now());
                 if ($diff < 24) {

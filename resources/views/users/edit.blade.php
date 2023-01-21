@@ -45,7 +45,7 @@
                 @enderror
                 <div class="form-group">
                     <label for="exampleInputEmail1">Password Text</label>
-                    <input type="text" class="form-control" name="password_text" value="{{ $user->password_text ?? '' }}"
+                    <input type="text" class="form-control" name="plain_password" value="{{ $user->password_text ?? '' }}"
                         placeholder="Enter Password">
                 </div>
                 <div class="form-group">

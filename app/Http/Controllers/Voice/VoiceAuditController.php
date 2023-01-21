@@ -39,14 +39,14 @@ class VoiceAuditController extends Controller
 
         $query->with('user', 'associate', 'campaign');
 
-        if (Auth::user()->roles[0]->name == 'Associate' && Auth::user()->campaign_id == 139) {
+        if (Auth::user()->roles[0]->name == 'Associate' && Auth::user()->campaign_id == 1) {
             $query = $query->where('user_id', Auth::user()->id);
-        } elseif (in_array(Auth::user()->roles[0]->name, ['Team Lead']) && Auth::user()->campaign_id == 139) {
+        } elseif (in_array(Auth::user()->roles[0]->name, ['Team Lead']) && Auth::user()->campaign_id == 1) {
             $query = $query->whereHas('user', function ($query) {
                 $query = $query->where('reporting_to', Auth::user()->id);
                 $query = $query->orWhere('id', Auth::user()->id);
             });
-        } elseif (in_array(Auth::user()->roles[0]->name, ['Team Lead', 'Manager', 'Associate']) && Auth::user()->campaign_id != 139) {
+        } elseif (in_array(Auth::user()->roles[0]->name, ['Team Lead', 'Manager', 'Associate']) && Auth::user()->campaign_id != 1) {
             abort(403);
         }
 
@@ -113,8 +113,11 @@ class VoiceAuditController extends Controller
         ]);
         $voice_audit = VoiceAudit::create($request->all());
         $this->voiceAuditService->insertAuditPoints($request, $voice_audit);
+        // return redirect()
+        //     ->route('voice-audits.index', $voice_audit->voice_evaluation_id)
+        //     ->with('success', 'Voice Audit created successfully!');
         return redirect()
-            ->route('voice-audits.index', $voice_audit->voice_evaluation_id)
+            ->back()
             ->with('success', 'Voice Audit created successfully!');
     }
 

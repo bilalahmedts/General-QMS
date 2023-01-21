@@ -18,7 +18,7 @@ class VoiceReportController extends Controller
 
         $query = new User;
 
-        $query = $query->where('campaign_id', 139);
+        $query = $query->where('campaign_id', 1);
 
         $query = $query->when($request, function ($query, $request) {
             $query->search($request);
@@ -40,7 +40,7 @@ class VoiceReportController extends Controller
 
         $user_evaluations = $query->paginate(15);
 
-        $users = User::where('campaign_id', 139)->orderBy('name', 'asc')->get();
+        $users = User::where('campaign_id', 1)->orderBy('name', 'asc')->get();
         return view('voice-reports.timesheet')->with(compact('users', 'user_evaluations'));
     }
 
@@ -50,7 +50,7 @@ class VoiceReportController extends Controller
 
         $query = new User;
 
-        $query = $query->where('campaign_id', 139);
+        $query = $query->where('campaign_id', 1);
 
         $query = $query->when($request, function ($query, $request) {
             $query->search($request);
@@ -72,7 +72,7 @@ class VoiceReportController extends Controller
 
         $user_evaluations = $query->paginate(15);
 
-        $users = User::where('campaign_id', 139)->orderBy('name', 'asc')->get();
+        $users = User::where('campaign_id', 1)->orderBy('name', 'asc')->get();
         return view('voice-reports.evaluators')->with(compact('users', 'user_evaluations'));
     }
 

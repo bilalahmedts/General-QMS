@@ -43,7 +43,7 @@ class VoiceEvaluationReviewController extends Controller
             $query->search($request);
         });
 
-        if(in_array(Auth::user()->roles[0]->name, ['Team Lead', 'Manager']) && Auth::user()->campaign_id != 139){
+        if(in_array(Auth::user()->roles[0]->name, ['Team Lead', 'Manager']) && Auth::user()->campaign_id != 1){
             $query = $query->where('campaign_id', Auth::user()->campaign_id);
         }
 

@@ -33,7 +33,7 @@
                 @error('name')
                     <div class="validate-error">{{ $message }}</div>
                 @enderror
-                
+
                 <div class="form-group">
                     <label for="exampleInputEmail1">Password</label>
                     <input type="password" class="form-control" name="password" placeholder="Enter Password">
@@ -43,7 +43,7 @@
                 @enderror
                 <div class="form-group">
                     <label for="exampleInputEmail1">Password Text</label>
-                    <input type="text" class="form-control" name="password_text" placeholder="Enter Password">
+                    <input type="text" class="form-control" name="plain_password" placeholder="Enter Password">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">Select Status</label>

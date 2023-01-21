@@ -27,7 +27,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'password_text',
+        'plain_password',
         'hrms_id',
         'campaign_id',
         'reporting_to'
