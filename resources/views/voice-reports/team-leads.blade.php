@@ -76,19 +76,6 @@
                             <input type="text" class="form-control datetimepicker-input datepicker2" name="to_date"
                                 value="{{ $to_date }}" data-toggle="datetimepicker" data-target=".datepicker2" />
                         </div>
-
-                        <div class="form-group col-md-4">
-                            <label for="">From Time</label>
-                            <input type="text" class="form-control datetimepicker-input datepicker3" name="from_time"
-                                value="{{ $from_time }}" data-toggle="datetimepicker" data-target=".datepicker3" />
-                        </div>
-
-                        <div class="form-group col-md-4">
-                            <label for="">To Time</label>
-                            <input type="text" class="form-control datetimepicker-input datepicker4" name="to_time"
-                                value="{{ $to_time }}" data-toggle="datetimepicker" data-target=".datepicker4" />
-                        </div>
-
                     </div>
                 </div>
                 <div class="card-footer">
@@ -113,15 +100,14 @@
                     <tr>
                         <th>#</th>
                         <th>Team Lead Name</th>
-                        <th class="text-center">Accepted</th>
-                        <th class="text-center">Rejected</th>
-                        <th class="text-center">Total</th>
-                        <th class="text-center">Total Score</th>
-                        {{-- <th class="text-center">Communication</th>
-                <th class="text-center">Sales</th>
-                <th class="text-center">Compliance</th>
-                <th class="text-center">Customer Service</th>
-                <th class="text-center">Product Presentation</th> --}}
+                        <th>Campaign</th>
+                        <th class="text-center">Total Evaluations</th>
+                        <th class="text-center">Above Average</th>
+                        <th class="text-center">Average</th>
+                        <th class="text-center">Bad</th>
+                        <th class="text-center">Fatal</th>
+                        <th class="text-center">Good</th>
+                        <th class="text-center">QA Percentage</th>
                         <th class="action">Action</th>
                     </tr>
                 </thead>
@@ -130,52 +116,49 @@
                     @if (count($user_evaluations) > 0)
                         @foreach ($user_evaluations as $key => $item)
                             @php
-                                $accepted = 0;
-                                $rejected = 0;
+                                $total = 0;
                                 $total_percentage = 0;
-                                $communication = 0;
-                                $sales = 0;
-                                $compliance = 0;
-                                $customer_service = 0;
-                                $product_presentation = 0;
+                                $aboveAverage = 0;
+                                $average = 0;
+                                $bad = 0;
+                                $fatal = 0;
+                                $good = 0;
+                                $other = 0;
+                                $evaluatorGrandTotal = 0;
+                                $grandQualityScore = 0;
                                 
                                 if (count($item->teamLeadVoiceAudits) > 0) {
                                     foreach ($item->teamLeadVoiceAudits as $audit) {
-                                        $audit->outcome == 'accepted' ? $accepted++ : $rejected++;
-                                        $communication = $communication + $audit->communication;
-                                        $sales = $sales + $audit->sales;
-                                        $compliance = $compliance + $audit->compliance;
-                                        $customer_service = $customer_service + $audit->customer_service;
-                                        $product_presentation = $product_presentation + $audit->product_presentation;
+                                        if ($audit->rating == 'above average') {
+                                            $aboveAverage++;
+                                        } elseif ($audit->rating == 'average') {
+                                            $average++;
+                                        } elseif ($audit->rating == 'bad') {
+                                            $bad++;
+                                        } elseif ($audit->rating == 'fatal') {
+                                            $fatal++;
+                                        } elseif ($audit->rating == 'good') {
+                                            $good++;
+                                        } elseif ($audit->rating == 'other') {
+                                            $other++;
+                                        }
+                                        // $evaluatorGrandTotal = $aboveAverage + $average + $bad + $fatal + $good + $other;
+                                        $total = $audit->percentage + $total;
+                                        $total_percentage = $total / count($item->teamLeadVoiceAudits);
                                     }
-                                
-                                    $communication = $communication / count($item->teamLeadVoiceAudits);
-                                    $sales = $sales / count($item->teamLeadVoiceAudits);
-                                    $compliance = $compliance / count($item->teamLeadVoiceAudits);
-                                    $customer_service = $customer_service / count($item->teamLeadVoiceAudits);
-                                    $product_presentation = $product_presentation / count($item->teamLeadVoiceAudits);
-                                
-                                    $total_percentage = $communication + $sales + $compliance + $customer_service + $product_presentation;
-                                
-                                    $total_percentage = $total_percentage / 5;
                                 }
                             @endphp
                             <tr>
                                 <td>{{ $user_evaluations->firstItem() + $key }}</td>
-                                <td>
-                                    {{ $item->name ?? '' }}
-                                    <br>
-                                    ({{ $item->campaign->name ?? '' }})
-                                </td>
-                                <td class="text-center">{{ $accepted }}</td>
-                                <td class="text-center">{{ $rejected }}</td>
+                                <td>{{ $item->name ?? '' }}</td>
+                                <td>{{ $item->campaign->name ?? '' }}</td>
                                 <td class="text-center">{{ count($item->teamLeadVoiceAudits) }}</td>
+                                <td class="text-center">{{ $aboveAverage }}</td>
+                                <td class="text-center">{{ $average }}</td>
+                                <td class="text-center">{{ $bad }}</td>
+                                <td class="text-center">{{ $fatal }}</td>
+                                <td class="text-center">{{ $good }}</td>
                                 <td class="text-center">{{ round($total_percentage) }}%</td>
-                                {{-- <td class="text-center">{{ round($communication) }}%</td>
-                            <td class="text-center">{{ round($sales) }}%</td>
-                            <td class="text-center">{{ round($compliance) }}%</td>
-                            <td class="text-center">{{ round($customer_service) }}%</td>
-                            <td class="text-center">{{ round($product_presentation) }}%</td> --}}
                                 <td class="action">
                                     <a href="{{ route('voice-audits.index', 1) }}?search=1&record_id=&user_id=&associate_id=-1&campaign_id={{ $item->campaign_id }}&outcome=&from_date={{ $from_date }}&to_date={{ $to_date }}&from_time={{ $from_time }}&to_time={{ $to_time }}&review="
                                         class="btn btn-success btn-sm" target="_blank"><i class="fas fa-eye"></i></a>

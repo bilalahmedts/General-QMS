@@ -10,11 +10,8 @@
                 </p>
             </a>
         </li>
-
-
         <li class="nav-header">VOICE AUDITS</li>
-
-        @if (in_array(Auth::user()->roles[0]->name, ['Super Admin', 'Director']) || Auth::user()->campaign_id == 1)
+        @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) || Auth::user()->campaign_id == 1)
             <li class="nav-item">
                 <a href="{{ route('voice-audits.index', 1) }}"
                     class="nav-link {{ request()->is('voice-audits/1', 'voice-audits/1/*') ? 'active' : '' }}">
@@ -47,7 +44,7 @@
         @endif
 
         @if (in_array(Auth::user()->roles[0]->name, ['Super Admin', 'Director', 'Team Lead', 'Manager', 'Associate']) &&
-            Auth::user()->campaign_id != 1)
+                Auth::user()->campaign_id != 1)
 
             @if (Auth::user()->roles[0]->name == 'Associate')
                 <li class="nav-item">
@@ -59,7 +56,7 @@
                         </p>
                     </a>
                 </li>
-            @elseif(in_array(Auth::user()->roles[0]->name, ['Team Lead', 'Manager']) && Auth::user()->campaign_id != 139)
+            @elseif(in_array(Auth::user()->roles[0]->name, ['Director', 'Team Lead', 'Manager']) && Auth::user()->campaign_id != 1)
                 <li class="nav-item">
                     <a href="{{ route('voice-evaluation-reviews.index', 'pending') }}"
                         class="nav-link {{ request()->is('voice-evaluation-reviews/pending') ? 'active' : '' }}">
@@ -100,65 +97,63 @@
                     </a>
                 </li>
             @endif
-
-
-
         @endif
-
         @if (in_array(Auth::user()->roles[0]->name, ['Super Admin', 'Director']) ||
-            (in_array(Auth::user()->roles[0]->name, ['Manager', 'Team Lead']) && Auth::user()->campaign_id == 1))
+                (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
+                    Auth::user()->campaign_id == 1))
             <li class="nav-header">VOICE REPORTS</li>
+            @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) ||
+                    (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
+                        Auth::user()->campaign_id == 1))
+                <li class="nav-item">
+                    <a href="{{ route('voice-reports.evaluators') }}?search=1&search_id=&from_date={{ now()->startOfMonth()->format('d/m/Y') }}&to_date={{ now()->endOfMonth()->format('d/m/Y') }}"
+                        class="nav-link {{ request()->is('voice-reports/evaluators', 'voice-reports/evaluators/*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-address-book"></i>
+                        <p>Evaluators Report</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('voice-reports.fatals') }}?search=1&search_id=&from_date={{ now()->startOfMonth()->format('d/m/Y') }}&to_date={{ now()->endOfMonth()->format('d/m/Y') }}"
+                        class="nav-link {{ request()->is('voice-reports/fatals', 'voice-reports/fatals/*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-ban"></i>
+                        <p>Fatal Report</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('voice-reports.timesheet') }}?search=1&search_id=-1&from_date={{ now()->startOfMonth()->format('d/m/Y') }}&to_date={{ now()->endOfMonth()->format('d/m/Y') }}"
+                        class="nav-link {{ request()->is('voice-reports/timesheet', 'voice-reports/timesheet/*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-clock"></i>
+                        <p>Timesheet Report</p>
+                    </a>
+                </li>
+            @endif
+            @if (in_array(Auth::user()->roles[0]->name, ['Super Admin', 'Director', 'Manager']))
+                <li class="nav-item">
+                    <a href="{{ route('voice-reports.associates') }}?search=1&search_id=&from_date={{ now()->startOfMonth()->format('d/m/Y') }}&to_date={{ now()->endOfMonth()->format('d/m/Y') }}"
+                        class="nav-link {{ request()->is('voice-reports/associates', 'voice-reports/associates/*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Associates Report</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('voice-reports.campaigns') }}?search=1&campaign_id=&from_date={{ now()->startOfMonth()->format('d/m/Y') }}&to_date={{ now()->endOfMonth()->format('d/m/Y') }}"
+                        class="nav-link {{ request()->is('voice-reports/campaigns', 'voice-reports/campaigns/*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>Campaigns Report</p>
+                    </a>
+                </li>
 
-            <li class="nav-item">
-                <a href="{{ route('voice-reports.timesheet') }}?search=1&search_id=-1&from_date={{ now()->startOfMonth()->format('d/m/Y') }}&to_date={{ now()->endOfMonth()->format('d/m/Y') }}"
-                    class="nav-link {{ request()->is('voice-reports/timesheet', 'voice-reports/timesheet/*') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-clock"></i>
-                    <p>Timesheet Report</p>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="{{ route('voice-reports.evaluators') }}?search=1&search_id=&from_date={{ now()->startOfMonth()->format('d/m/Y') }}&to_date={{ now()->endOfMonth()->format('d/m/Y') }}"
-                    class="nav-link {{ request()->is('voice-reports/evaluators', 'voice-reports/evaluators/*') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-address-book"></i>
-                    <p>Evaluators Report</p>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="{{ route('voice-reports.campaigns') }}?search=1&campaign_id=&from_date={{ now()->startOfMonth()->format('d/m/Y') }}&to_date={{ now()->endOfMonth()->format('d/m/Y') }}"
-                    class="nav-link {{ request()->is('voice-reports/campaigns', 'voice-reports/campaigns/*') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-book"></i>
-                    <p>Campaigns Report</p>
-                </a>
-            </li>
-
-                        <li class="nav-item">
-                <a href="{{ route('voice-reports.team-leads') }}?search=1&search_id=&from_date={{ now()->startOfMonth()->format('d/m/Y') }}&to_date={{ now()->endOfMonth()->format('d/m/Y') }}"
-                    class="nav-link {{ request()->is('voice-reports/team-leads', 'voice-reports/team-leads/*') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-user-md"></i>
-                    <p>Team Leads Report</p>
-                </a>
-            </li> 
-
-            <li class="nav-item">
-                <a href="{{ route('voice-reports.associates') }}?search=1&search_id=&from_date={{ now()->startOfMonth()->format('d/m/Y') }}&to_date={{ now()->endOfMonth()->format('d/m/Y') }}"
-                    class="nav-link {{ request()->is('voice-reports/associates', 'voice-reports/associates/*') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-users"></i>
-                    <p>Associates Report</p>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="{{ route('voice-reports.fatals') }}?search=1&search_id=&from_date={{ now()->startOfMonth()->format('d/m/Y') }}&to_date={{ now()->endOfMonth()->format('d/m/Y') }}"
-                    class="nav-link {{ request()->is('voice-reports/fatals', 'voice-reports/fatals/*') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-ban"></i>
-                    <p>Fatal Report</p>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a href="{{ route('voice-reports.team-leads') }}?search=1&search_id=&from_date={{ now()->startOfMonth()->format('d/m/Y') }}&to_date={{ now()->endOfMonth()->format('d/m/Y') }}"
+                        class="nav-link {{ request()->is('voice-reports/team-leads', 'voice-reports/team-leads/*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-user-md"></i>
+                        <p>Team Leads Report</p>
+                    </a>
+                </li>
+            @endif
         @endif
         @if (in_array(Auth::user()->roles[0]->name, ['Super Admin', 'Director']) ||
-            (in_array(Auth::user()->roles[0]->name, ['Manager', 'Team Lead']) && Auth::user()->campaign_id == 1))
+                (in_array(Auth::user()->roles[0]->name, ['Manager', 'Team Lead']) && Auth::user()->campaign_id == 1))
             <li class="nav-header">SOLAR LT</li>
 
             <li class="nav-item">

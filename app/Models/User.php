@@ -79,6 +79,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Campaign::class, 'id', 'campaign_id');
     }
+    public function project()
+    {
+        return $this->hasOne(Project::class, 'id', 'project_id');
+    }
 
     public function supervisor(){
         return $this->hasOne(User::class, 'id', 'reporting_to');
@@ -142,6 +146,11 @@ class User extends Authenticatable
         if ($request->has('campaign_id')) {
             if (!empty($request->campaign_id)) {
                 $query = $query->where('campaign_id', $request->campaign_id);
+            }
+        }
+        if ($request->has('project_id')) {
+            if (!empty($request->project_id)) {
+                $query = $query->where('project_id', $request->project_id);
             }
         }
 
