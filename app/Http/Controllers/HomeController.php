@@ -21,25 +21,25 @@ class HomeController extends Controller
         $voice_audit_appeals_count = $this->getVoiceAuditAppealsCounts();
         $voice_actions_count = $this->getVoiceActionsCounts();
 
-        if (in_array(Auth::user()->roles[0]->name, ['Super Admin', 'Director']) || Auth::user()->campaign_id == 139) {
+        if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) || Auth::user()->campaign_id == 1) {
 
             $query = new VoiceAudit;
 
             $query->with('user', 'associate', 'campaign');
 
-            if (Auth::user()->roles[0]->name == 'Associate' && Auth::user()->campaign_id == 139) {
+            if (Auth::user()->roles[0]->name == 'Associate' && Auth::user()->campaign_id == 1) {
                 $query = $query->where('user_id', Auth::user()->id);
-            } elseif (in_array(Auth::user()->roles[0]->name, ['Team Lead']) && Auth::user()->campaign_id == 139) {
+            } elseif (in_array(Auth::user()->roles[0]->name, ['Team Lead']) && Auth::user()->campaign_id == 1) {
                 $query = $query->whereHas('user', function ($query) {
                     $query = $query->where('reporting_to', Auth::user()->id);
                     $query = $query->orWhere('id', Auth::user()->id);
                 });
-            } elseif (in_array(Auth::user()->roles[0]->name, ['Team Lead', 'Manager', 'Associate']) && Auth::user()->campaign_id != 139) {
+            } elseif (in_array(Auth::user()->roles[0]->name, ['Team Lead', 'Manager', 'Associate']) && Auth::user()->campaign_id != 1) {
                 abort(403);
             }
 
             $voice_audits = $query->sortable()->orderBy('id', 'desc')->paginate(10);
-            if (in_array(Auth::user()->roles[0]->name, ['Manager','Team Lead']) && Auth::user()->campaign_id == 139) {
+            if (in_array(Auth::user()->roles[0]->name, ['Director','Manager','Team Lead']) && Auth::user()->campaign_id == 1) {
                     $query = $query->whereHas('user', function ($query) {
                     $query = $query->where('reporting_to', Auth::user()->id);
                     $query = $query->orWhere('id', Auth::user()->id);
@@ -51,13 +51,13 @@ class HomeController extends Controller
                 });
             })->paginate(10);
             return view('home')->with(compact('voice_audit_count', 'voice_pending_reviews_count', 'voice_audit_appeals_count', 'voice_actions_count', 'voice_audits','user_evaluations'));
-        } elseif (in_array(Auth::user()->roles[0]->name, ['Manager', 'Team Lead'])) {
+        } elseif (in_array(Auth::user()->roles[0]->name, ['Director','Manager', 'Team Lead'])) {
 
             $query = new VoiceAudit;
 
             $query->with('user', 'associate', 'campaign');
 
-            if (in_array(Auth::user()->roles[0]->name, ['Team Lead', 'Manager']) && Auth::user()->campaign_id != 139) {
+            if (in_array(Auth::user()->roles[0]->name, ['Director','Team Lead', 'Manager']) && Auth::user()->campaign_id != 1) {
                 $query = $query->where('campaign_id', Auth::user()->campaign_id);
 
             }
@@ -74,7 +74,7 @@ class HomeController extends Controller
     {
         $query = new VoiceAudit;
 
-        if (Auth::user()->campaign_id == 139) {
+        if (Auth::user()->campaign_id == 1) {
             if (Auth::user()->roles[0]->name == 'Associate') {
                 $query = $query->where('user_id', Auth::user()->id);
             } elseif (Auth::user()->roles[0]->name == 'Team Lead') {
@@ -83,7 +83,7 @@ class HomeController extends Controller
                     $query = $query->orWhere('id', Auth::user()->id);
                 });
             }
-        } elseif (in_array(Auth::user()->roles[0]->name, ['Manager', 'Team Lead'])) {
+        } elseif (in_array(Auth::user()->roles[0]->name, ['Director','Manager', 'Team Lead'])) {
             $query = $query->where('campaign_id', Auth::user()->campaign_id);
         }
 
@@ -97,7 +97,7 @@ class HomeController extends Controller
         $query = $query->doesnthave('appeal');
         $query = $query->doesnthave('action');
 
-        if (Auth::user()->campaign_id == 139) {
+        if (Auth::user()->campaign_id == 1) {
             if (Auth::user()->roles[0]->name == 'Associate') {
                 $query = $query->where('user_id', Auth::user()->id);
             } elseif (Auth::user()->roles[0]->name == 'Team Lead') {
@@ -106,7 +106,7 @@ class HomeController extends Controller
                     $query = $query->orWhere('id', Auth::user()->id);
                 });
             }
-        } elseif (in_array(Auth::user()->roles[0]->name, ['Manager', 'Team Lead'])) {
+        } elseif (in_array(Auth::user()->roles[0]->name, ['Director','Manager', 'Team Lead'])) {
             $query = $query->where('campaign_id', Auth::user()->campaign_id);
         }
 
@@ -123,7 +123,7 @@ class HomeController extends Controller
             $query = $query->where('status', 'pending');
         });
 
-        if (Auth::user()->campaign_id == 139) {
+        if (Auth::user()->campaign_id == 1) {
             if (Auth::user()->roles[0]->name == 'Associate') {
                 $query = $query->whereHas('user', function ($query) {
                     $query = $query->orWhere('id', Auth::user()->id);
@@ -134,7 +134,7 @@ class HomeController extends Controller
                     $query = $query->orWhere('id', Auth::user()->id);
                 });
             }
-        } elseif (in_array(Auth::user()->roles[0]->name, ['Manager', 'Team Lead'])) {
+        } elseif (in_array(Auth::user()->roles[0]->name, ['Director','Manager', 'Team Lead'])) {
             $query = $query->where('campaign_id', Auth::user()->campaign_id);
         }
 
@@ -147,7 +147,7 @@ class HomeController extends Controller
 
         $query = $query->has('action');
 
-        if (Auth::user()->campaign_id == 139) {
+        if (Auth::user()->campaign_id == 1) {
             if (Auth::user()->roles[0]->name == 'Associate') {
                 $query = $query->where('user_id', Auth::user()->id);
             } elseif (Auth::user()->roles[0]->name == 'Team Lead') {
@@ -156,7 +156,7 @@ class HomeController extends Controller
                     $query = $query->orWhere('id', Auth::user()->id);
                 });
             }
-        } elseif (in_array(Auth::user()->roles[0]->name, ['Manager', 'Team Lead'])) {
+        } elseif (in_array(Auth::user()->roles[0]->name, ['Director','Manager', 'Team Lead'])) {
             $query = $query->where('campaign_id', Auth::user()->campaign_id);
         }
 
@@ -166,7 +166,7 @@ class HomeController extends Controller
     /*  public function getAuditsByTime()
     {
         $query = new User;
-        $user_evaluations = $query->with('voiceAudits')->where('campaign_id',139)->get();
+        $user_evaluations = $query->with('voiceAudits')->where('campaign_id',1)->get();
         return $user_evaluations;
 
     } */

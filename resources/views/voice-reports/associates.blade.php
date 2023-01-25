@@ -124,10 +124,10 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>HRMS</th>
-                        <th>Associate Name</th>
-                        <th>Campaign</th>
-                        <th>Project</th>
+                        <th>@sortablelink('hrms_id','HRMS')</th>
+                        <th>@sortablelink('name','Associate Name')</th>
+                        <th>@sortablelink('campaign_id','Campaign')</th>
+                        <th>@sortablelink('project_id','Project')</th>
                         <th class="text-center">Total Evaluations</th>
                         <th class="text-center">Above Average</th>
                         <th class="text-center">Average</th>

@@ -38,7 +38,7 @@ class VoiceAuditController extends Controller
         $query = new VoiceAudit();
 
         $query->with('user', 'associate', 'campaign');
-
+        // this part of condition is to view audits to the evalutor of QA evaluated by them
         if (Auth::user()->roles[0]->name == 'Associate' && Auth::user()->campaign_id == 1) {
             $query = $query->where('user_id', Auth::user()->id);
         } elseif (in_array(Auth::user()->roles[0]->name, ['Team Lead']) && Auth::user()->campaign_id == 1) {

@@ -1,5 +1,6 @@
 <div class="row">
     <div class="col-md-4">
+        <input type="hidden" name="outcome" value="{{ $voice_audit->outcome }}" id="outcome">
         <div class="form-group">
             <label for="">Percentage</label>
             <input type="text" name="percentage" value="{{ $voice_audit->percentage }}" id="percentage"

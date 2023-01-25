@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Reports;
 use Carbon\Carbon;
 
 use App\Models\User;
+use App\Models\Project;
 use App\Models\Campaign;
 use App\Models\VoiceAudit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
 
 class VoiceReportController extends Controller
 {
@@ -28,13 +29,15 @@ class VoiceReportController extends Controller
         $query = $query->whereHas('voiceAudits', function ($query) use ($request) {
             $query = $query->when($request, function ($query, $request) {
                 $query->search($request);
-            });
+            }
+            );
         });
 
         $query = $query->with('voiceAudits', function ($query) use ($request) {
             $query = $query->when($request, function ($query, $request) {
                 $query->search($request);
-            });
+            }
+            );
         });
 
         $query = $query->orderBy('name', 'asc');
@@ -60,13 +63,15 @@ class VoiceReportController extends Controller
         $query = $query->whereHas('voiceAudits', function ($query) use ($request) {
             $query = $query->when($request, function ($query, $request) {
                 $query->search($request);
-            });
+            }
+            );
         });
 
         $query = $query->with('voiceAudits', function ($query) use ($request) {
             $query = $query->when($request, function ($query, $request) {
                 $query->search($request);
-            });
+            }
+            );
         });
 
         $query = $query->orderBy('name', 'asc');
@@ -81,7 +86,9 @@ class VoiceReportController extends Controller
     {
 
         $query = new Campaign;
-
+        if (in_array(Auth::user()->roles[0]->name, ['Director', 'Team Lead', 'Manager']) && Auth::user()->campaign_id != 1) {
+            $query = $query->where('id', Auth::user()->campaign_id);
+        }
         $query = $query->when($request, function ($query, $request) {
             $query->search($request);
         });
@@ -89,13 +96,15 @@ class VoiceReportController extends Controller
         $query = $query->whereHas('voiceAudits', function ($query) use ($request) {
             $query = $query->when($request, function ($query, $request) {
                 $query->search($request);
-            });
+            }
+            );
         });
 
         $query = $query->with('voiceAudits', function ($query) use ($request) {
             $query = $query->when($request, function ($query, $request) {
                 $query->search($request);
-            });
+            }
+            );
         });
 
         $query = $query->orderBy('name', 'asc');
@@ -109,7 +118,9 @@ class VoiceReportController extends Controller
     public function teamLeads(Request $request)
     {
         $query = new User;
-
+        if (in_array(Auth::user()->roles[0]->name, ['Director', 'Team Lead', 'Manager']) && Auth::user()->campaign_id != 1) {
+            $query = $query->where('campaign_id', Auth::user()->campaign_id);
+        }
         $query = $query->role('Team Lead');
 
         $query = $query->when($request, function ($query, $request) {
@@ -119,13 +130,15 @@ class VoiceReportController extends Controller
         $query = $query->whereHas('teamLeadVoiceAudits', function ($query) use ($request) {
             $query = $query->when($request, function ($query, $request) {
                 $query->search($request);
-            });
+            }
+            );
         });
 
         $query = $query->with('teamLeadVoiceAudits', function ($query) use ($request) {
             $query = $query->when($request, function ($query, $request) {
                 $query->search($request);
-            });
+            }
+            );
         });
 
         $query = $query->orderBy('name', 'asc');
@@ -141,7 +154,9 @@ class VoiceReportController extends Controller
     public function associates(Request $request)
     {
         $query = new User;
-
+        if (in_array(Auth::user()->roles[0]->name, ['Director', 'Team Lead', 'Manager']) && Auth::user()->campaign_id != 1) {
+            $query = $query->where('campaign_id', Auth::user()->campaign_id);
+        }
         $query = $query->role('Associate');
 
         $query = $query->when($request, function ($query, $request) {
@@ -151,13 +166,15 @@ class VoiceReportController extends Controller
         $query = $query->whereHas('associateVoiceAudits', function ($query) use ($request) {
             $query = $query->when($request, function ($query, $request) {
                 $query->search($request);
-            });
+            }
+            );
         });
 
         $query = $query->with('associateVoiceAudits', function ($query) use ($request) {
             $query = $query->when($request, function ($query, $request) {
                 $query->search($request);
-            });
+            }
+            );
         });
 
         $query = $query->orderBy('name', 'asc');
@@ -167,7 +184,7 @@ class VoiceReportController extends Controller
         $users = User::role('Associate')->where('status', 'active')->orderBy('name', 'asc')->get();
         $campaigns = Campaign::where('status', 'active')->orderBy('name', 'asc')->get();
         $projects = Project::orderBy('name', 'asc')->get();
-        return view('voice-reports.associates')->with(compact('users', 'user_evaluations','projects','campaigns'));
+        return view('voice-reports.associates')->with(compact('users', 'user_evaluations', 'projects', 'campaigns'));
     }
 
     public function fatals(Request $request)
@@ -181,6 +198,6 @@ class VoiceReportController extends Controller
         $teamLeads = User::role('Team Lead')->where('status', 'active')->orderBy('name', 'asc')->get();
         $users = User::orderBy('name', 'asc')->get();
         $user_evaluations = $query->with('associate', 'user', 'campaign', 'teamLead')->where('review_priority', 1)->paginate(10);
-        return view('voice-reports.fatals')->with(compact('users','associates','teamLeads','user_evaluations'));
+        return view('voice-reports.fatals')->with(compact('users', 'associates', 'teamLeads', 'user_evaluations'));
     }
 }

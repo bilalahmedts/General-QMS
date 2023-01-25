@@ -35,6 +35,7 @@ class User extends Authenticatable
 
     public $sortable = [
         'id',
+        'hrms_id',
         'name',
         'username',
         'email',

@@ -96,32 +96,39 @@
 
 @section('scripts')
 <script>
-        var good = document.getElementById('good');
-        var aboveAverage = document.getElementById('aboveAverage');
-        var average = document.getElementById('average');
-        var bad = document.getElementById('bad');
-        var fatal = document.getElementById('fatal');
-        var other = document.getElementById('other');
-        var percentage = document.getElementById('percentage').value;
+        let good = document.getElementById('good');
+        let aboveAverage = document.getElementById('aboveAverage');
+        let average = document.getElementById('average');
+        let bad = document.getElementById('bad');
+        let fatal = document.getElementById('fatal');
+        let other = document.getElementById('other');
+        let outcome = document.getElementById('outcome');
+        let percentage = document.getElementById('percentage').value;
         function myFunction() {
             if (good.checked == true) {
                 percentage = 100;
                 document.getElementById('percentage').value = percentage;
+                outcome.value = 'accepted';
             } else if (aboveAverage.checked == true) {
                 percentage = 95;
                 document.getElementById('percentage').value = percentage;
+                outcome.value = 'rejected';
             } else if (average.checked == true) {
                 percentage = 80;
                 document.getElementById('percentage').value = percentage;
+                outcome.value = 'rejected';
             } else if (bad.checked == true) {
                 percentage = 50;
                 document.getElementById('percentage').value = percentage;
+                outcome.value = 'rejected';
             } else if (fatal.checked == true) {
                 percentage = 0;
                 document.getElementById('percentage').value = percentage;
+                outcome.value = 'rejected';
             } else if (other.checked == true) {
                 alert("Please Enter the value in Percentage Field");
                 document.getElementById('percentage').readOnly = false;
+                outcome.value = 'rejected';
             } else {
                 document.getElementById('percentage').value = percentage;
                 document.getElementById('percentage').readOnly = true;

@@ -85,9 +85,9 @@
         <table class="table table-bordered">
             <thead>
               <tr>
-                <th>Record ID</th>
                 <th>Associate</th>
                 <th>Campaign</th>
+                <th>Project</th>
                 <th>Call Date</th>
                 <th>Result</th>
                 <th>Outcome</th>
@@ -101,13 +101,11 @@
 
                     @foreach ($voice_audits as $audit)
                         <tr>
-                            <td>
-                                {{ $audit->record_id ?? 0 }}
-                            </td>
-                            <td>{{ $audit->associate->name ?? 'undefined' }}</td>
-                            <td>{{ $audit->campaign->name ?? 'undefined' }}</td>
-                            <td>{{ $audit->call_date }}</td>
-                            <td>{{ $audit->percentage }}%</td>
+                            <td>{{ $audit->associate->name ?? '' }}</td>
+                            <td>{{ $audit->campaign->name ?? '' }}</td>
+                            <td>{{ $audit->project->name ?? '' }}</td>
+                            <td>{{ $audit->call_date ?? '' }}</td>
+                            <td>{{ $audit->percentage ?? '' }}%</td>
                             <td>
                                 @if($audit->outcome == 'accepted')
                                     <span class="badge bg-success">Accepted</span>

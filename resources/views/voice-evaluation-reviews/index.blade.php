@@ -51,12 +51,6 @@
         <div class="card card-primary card-outline mt-3" id="search" @if(isset($_GET['search'])) style="display: block;" @endif>
             <div class="card-body">
                 <div class="row">
-
-                    <div class="form-group col-md-4">
-                        <label for="">Record ID</label>
-                        <input type="text" class="form-control" name="record_id" value="{{ $record_id }}" />
-                    </div>
-
                     <div class="form-group col-md-4">
                         <label for="">Select Associate</label>
                         <select name="associate_id" class="form-control select2">
@@ -111,9 +105,9 @@
         <table class="table table-bordered">
             <thead>
               <tr>
-                <th>@sortablelink('record_id', 'Record ID')</th>
                 <th>@sortablelink('associate_id', 'Associate')</th>
                 <th>@sortablelink('campaign_id', 'Campaign')</th>
+                <th>@sortablelink('project_id', 'Project')</th>
                 <th>@sortablelink('call_date', 'Call Date')</th>
                 <th>Result</th>
                 <th>Outcome</th>
@@ -128,11 +122,9 @@
 
                     @foreach ($voice_audits as $audit)
                         <tr>
-                            <td>
-                                {{ $audit->record_id ?? 0 }}
-                            </td>
                             <td>{{ $audit->associate->name ?? 'undefined' }}</td>
                             <td>{{ $audit->campaign->name ?? 'undefined' }}</td>
+                            <td>{{ $audit->project->name ?? 'undefined' }}</td>
                             <td>{{ $audit->call_date ?? '' }}</td>
                             <td>{{ $audit->percentage ?? '' }}%</td>
                             <td>

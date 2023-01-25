@@ -96,6 +96,8 @@
                     <tr>
                         <th>Evaluator</th>
                         <th>Associate</th>
+                        <th>Campaign</th>
+                        <th>Project</th>
                         <th>Evaluation Time</th>
                         <th>Result</th>
 
@@ -113,8 +115,9 @@
                                 <td>{{ $audit->user->name ?? 'undefined' }}</td>
                                 <td>
                                     {{ $audit->associate->name ?? 'undefined' }}
-                                    <br>({{ $audit->campaign->name ?? 'undefined' }})
                                 </td>
+                                <td>{{ $audit->campaign->name ?? 'undefined' }}</td>
+                                <td>{{ $audit->project->name ?? '' }}</td>
                                 <td>{{ $audit->evaluation_time }}</td>
                                 <td>{{ $audit->percentage }}%</td>
 
@@ -137,83 +140,4 @@
         </div>
 
     </div>
-    <!-- /.card -->
-{{--     <div class="card card-primary card-outline">
-        <div class="card-header">
-            <h3 class="card-title">Recent Evaluations by Time</h3>
-        </div>
-
-        <div class="card-body">
-
-            <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    <th>Evaluator Name</th>
-                    <th class="text-center">Total Evaluations</th>
-                    <th class="text-center">Total Handling Time</th>
-                    <th class="text-center">Total Call Time</th>
-                    <th class="text-center">Avg. Handling Time</th>
-                    <th class="text-center">Avg. Call Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-
-                    @if(count($user_evaluations) > 0)
-                        @foreach ($user_evaluations as $item)
-                            @php
-                                $handling_time = 0;
-                                $avg_handling_time = 0;
-                                $calling_time = 0;
-                                $avg_calling_time = 0;
-
-                                if(count($item->voiceAudits) > 0){
-                                    foreach($item->voiceAudits as $audit){
-                                        if($audit->evaluation_time){
-                                            sscanf($audit->evaluation_time, "%d:%d:%d", $hours, $minutes, $seconds);
-                                            $time_seconds = isset($seconds) ? $hours * 3600 + $minutes * 60 + $seconds : $hours * 60 + $minutes;
-
-                                            $handling_time = $handling_time + $time_seconds;
-                                        }
-                                        if($audit->recording_duration){
-                                            sscanf($audit->recording_duration, "%d:%d:%d", $hours, $minutes, $seconds);
-                                            $time_seconds = isset($seconds) ? $hours * 3600 + $minutes * 60 + $seconds : $hours * 60 + $minutes;
-
-                                            $calling_time = $calling_time + $time_seconds;
-                                        }
-                                    }
-
-                                    $avg_handling_time = $handling_time / count($item->voiceAudits);
-                                    $avg_calling_time = $calling_time / count($item->voiceAudits);
-                                }
-
-                            @endphp
-                            <tr>
-                                <td>{{ $item->name }}</td>
-                                <td class="text-center">{{ count($item->voiceAudits) }}</td>
-                                <td class="text-center">{{ gmdate("H:i:s", $handling_time) }}</td>
-                                <td class="text-center">{{ gmdate("H:i:s", $calling_time) }}</td>
-                                <td class="text-center">{{ gmdate("H:i:s", $avg_handling_time) }}</td>
-                                <td class="text-center">{{ gmdate("H:i:s", $avg_calling_time) }}</td>
-                            </tr>
-                        @endforeach
-                    @else
-                        <tr><td colspan="10" class="text-center">No records found!</td></tr>
-                    @endif
-
-                </tbody>
-            </table>
-
-        </div>
-
-        @if($user_evaluations->total() > 15)
-            <!-- /.card-body -->
-            <div class="card-footer clearfix">
-                {{ $user_evaluations->appends(request()->input())->links() }}
-            </div>
-            <!-- /.card-footer-->
-        @endif
-    </div> --}}
-
-
-
 @endsection

@@ -1,9 +1,5 @@
 <table class="table">
     <tr>
-        <th style="border-top: none;">Record ID</th>
-        <td style="border-top: none;">{{ $voice_audit->record_id ?? '' }}</td>
-    </tr>
-    <tr>
         <th>Call Date</th>
         <td>{{ $voice_audit->call_date ?? '' }}</td>
     </tr>
@@ -51,19 +47,6 @@
             <span class="badge bg-secondary">Other</span>
         @endif
     </td>
-    <tr>
-        <th>Outcome</th>
-        <td>
-            @if ($voice_audit->outcome == 'accepted')
-                <span class="badge bg-success">Accepted</span>
-            @else
-                <span class="badge bg-danger">Rejected @if ($voice_audit->review_priority == 1)
-                        / Critical
-                    @endif
-                </span>
-            @endif
-        </td>
-    </tr>
     <tr>
         <th>Status</th>
         <td>

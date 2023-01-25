@@ -122,9 +122,10 @@
         <table class="table table-bordered">
             <thead>
               <tr>
-                <th>@sortablelink('record_id', 'Record ID')</th>
+            
                 <th>@sortablelink('associate_id', 'Associate')</th>
                 <th>@sortablelink('campaign_id', 'Campaign')</th>
+                <th>@sortablelink('project_id', 'Project')</th>
                 <th>@sortablelink('call_date', 'Call Date')</th>
                 <th>Result</th>
                 <th>Status</th>
@@ -138,11 +139,10 @@
 
                     @foreach ($voice_audits as $audit)
                         <tr>
-                            <td>
-                                {{ $audit->record_id ?? 0 }}
-                            </td>
+
                             <td>{{ $audit->associate->name ?? 'undefined' }}</td>
                             <td>{{ $audit->campaign->name ?? 'undefined' }}</td>
+                            <td>{{ $audit->project->name ?? 'undefined' }}</td>
                             <td>{{ $audit->call_date }}</td>
                             <td>{{ $audit->percentage }}%</td>
                             <td>

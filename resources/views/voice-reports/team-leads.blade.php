@@ -101,6 +101,7 @@
                         <th>#</th>
                         <th>Team Lead Name</th>
                         <th>Campaign</th>
+                        {{-- <th>Project</th> --}}
                         <th class="text-center">Total Evaluations</th>
                         <th class="text-center">Above Average</th>
                         <th class="text-center">Average</th>
@@ -151,7 +152,8 @@
                             <tr>
                                 <td>{{ $user_evaluations->firstItem() + $key }}</td>
                                 <td>{{ $item->name ?? '' }}</td>
-                                <td>{{ $item->campaign->name ?? '' }}</td>
+                                <td>{{ $item->campaign->name ?? '-' }}</td>
+                                {{-- <td>{{ $item->project->name ?? '-' }}</td> --}}
                                 <td class="text-center">{{ count($item->teamLeadVoiceAudits) }}</td>
                                 <td class="text-center">{{ $aboveAverage }}</td>
                                 <td class="text-center">{{ $average }}</td>
