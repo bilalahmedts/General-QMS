@@ -18,7 +18,7 @@ class VoiceAudit extends Model
 
     protected $fillable = ['voice_evaluation_id', 'user_id', 'associate_id', 'team_lead_id', 'call_date', 'percentage', 'customer_name', 'customer_phone', 'record_id', 'recording_duration', 'recording_link', 'outcome', 'lead_status', 'notes', 'call_type', 'campaign_id', 'project_id', 'review_priority', 'rating', 'status', 'client_status', 'evaluation_time', 'communication', 'sales', 'compliance', 'customer_service', 'product_presentation'];
 
-    public $sortable = ['id', 'user_id', 'associate_id', 'campaign_id', 'project_id', 'call_date', 'customer_name', 'customer_phone', 'outcome', 'billable_status', 'status', 'evaluation_time', 'created_at', 'updated_at'];
+    public $sortable = ['id','hrms_id', 'user_id', 'associate_id', 'team_lead_id', 'campaign_id', 'project_id', 'call_date', 'customer_name', 'customer_phone', 'outcome', 'billable_status', 'status', 'evaluation_time', 'created_at', 'updated_at'];
 
     public function getCallDateAttribute($value)
     {

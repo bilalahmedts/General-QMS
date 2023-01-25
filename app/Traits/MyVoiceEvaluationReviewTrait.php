@@ -3,6 +3,8 @@
 namespace App\Traits;
 
 use App\Models\User;
+use App\Models\Project;
+use App\Models\Campaign;
 use App\Models\VoiceAudit;
 use Illuminate\Http\Request;
 use App\Models\VoiceEvaluation;
@@ -75,8 +77,9 @@ trait MyVoiceEvaluationReviewTrait
         $voice_audits = $query->sortable()->orderBy('id', 'desc')->paginate(15);
 
         $users = User::where('campaign_id', Auth::user()->campaign_id)->orderBy('name', 'asc')->get();
-
-        return view('voice-evaluation-reviews.appeals')->with(compact('voice_audits', 'users'));
+        $campaigns = Campaign::where('status', 'active')->orderBy('name', 'asc')->get();
+        $projects = Project::orderBy('name', 'asc')->get();
+        return view('voice-evaluation-reviews.appeals')->with(compact('voice_audits', 'users','campaigns','projects'));
     }
 
     public function appealShow(VoiceAudit $voice_audit, VoiceAuditService $voiceAuditService){
@@ -132,8 +135,9 @@ trait MyVoiceEvaluationReviewTrait
         $voice_audits = $query->sortable()->orderBy('id', 'desc')->paginate(15);
 
         $users = User::where('campaign_id', Auth::user()->campaign_id)->orderBy('name', 'asc')->get();
-
-        return view('voice-evaluation-reviews.actions')->with(compact('voice_audits', 'users'));
+        $campaigns = Campaign::where('status', 'active')->orderBy('name', 'asc')->get();
+        $projects = Project::orderBy('name', 'asc')->get();
+        return view('voice-evaluation-reviews.actions')->with(compact('voice_audits', 'users','campaigns','projects'));
     }
 
     public function actionShow(VoiceAudit $voice_audit, VoiceAuditService $voiceAuditService){

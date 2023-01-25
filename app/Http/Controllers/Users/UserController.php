@@ -22,7 +22,7 @@ class UserController extends Controller
         })
             ->with('roles', 'campaign', 'supervisor')
             ->sortable()
-            ->orderBy('id', 'asc')
+            ->orderBy('name', 'asc')
             ->paginate(15);
 
         $campaigns = Campaign::where('status', 1)

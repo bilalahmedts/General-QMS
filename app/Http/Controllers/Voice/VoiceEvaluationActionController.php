@@ -20,8 +20,9 @@ class VoiceEvaluationActionController extends Controller
         $voice_evaluation_actions = VoiceEvaluationAction::when($request, function ($query, $request) {
             $query->search($request);
         })->sortable()->orderBy('sort', 'asc')->paginate(15);
-
-        return view('voice-evaluation-actions.index')->with(compact('voice_evaluation_actions'));
+        $campaigns = Campaign::where('status', 'active')->orderBy('name', 'asc')->get();
+        $projects = Project::orderBy('name', 'asc')->get();
+        return view('voice-evaluation-actions.index')->with(compact('voice_evaluation_actions','campaigns','projects'));
     }
 
     /**

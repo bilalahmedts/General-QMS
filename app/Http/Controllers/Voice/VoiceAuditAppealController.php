@@ -4,16 +4,17 @@ namespace App\Http\Controllers\Voice;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Project;
 use App\Models\Campaign;
 use App\Models\VoiceAudit;
 use Illuminate\Http\Request;
 use App\Models\VoiceEvaluation;
+use App\Models\VoiceAuditAppeal;
 use App\Models\DatapointCategory;
 use App\Services\VoiceAuditService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\VoiceAuditRequest;
-use App\Models\VoiceAuditAppeal;
 
 class VoiceAuditAppealController extends Controller
 {
@@ -68,8 +69,9 @@ class VoiceAuditAppealController extends Controller
 
         $users = User::orderBy('name', 'asc')->get();
         $campaigns = Campaign::where('status', 'active')->orderBy('name', 'asc')->get();
+        $projects = Project::orderBy('name', 'asc')->get();
 
-        return view('voice-audit-appeals.index')->with(compact('voice_audits', 'users', 'campaigns'));
+        return view('voice-audit-appeals.index')->with(compact('voice_audits', 'users', 'campaigns','projects'));
     }
 
     /**
@@ -121,7 +123,7 @@ class VoiceAuditAppealController extends Controller
         $categories = $this->voiceAuditService->getAuditCategories($voice_audit);
 
         $voice_evaluation = VoiceEvaluation::findOrFail($voice_audit->voice_evaluation_id);
-
+        
         return view('voice-audit-appeals.edit')->with(compact('voice_audit', 'users', 'categories', 'voice_evaluation'));
     }
 

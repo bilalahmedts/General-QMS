@@ -98,7 +98,7 @@
                 </li>
             @endif
         @endif
-        @if (in_array(Auth::user()->roles[0]->name, ['Super Admin', 'Director']) ||
+        @if (in_array(Auth::user()->roles[0]->name, ['Super Admin', 'Director','Manager']) ||
                 (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
                     Auth::user()->campaign_id == 1))
             <li class="nav-header">VOICE REPORTS</li>
@@ -152,8 +152,8 @@
                 </li>
             @endif
         @endif
-        @if (in_array(Auth::user()->roles[0]->name, ['Super Admin', 'Director']) ||
-                (in_array(Auth::user()->roles[0]->name, ['Manager', 'Team Lead']) && Auth::user()->campaign_id == 1))
+        @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) ||
+                (in_array(Auth::user()->roles[0]->name, ['Director','Manager', 'Team Lead']) && Auth::user()->campaign_id == 1))
             <li class="nav-header">SOLAR LT</li>
 
             <li class="nav-item">

@@ -85,7 +85,9 @@
         <table class="table table-bordered">
             <thead>
               <tr>
+                <th>HRMS ID</th>
                 <th>Associate</th>
+                <th>Team Lead</th>
                 <th>Campaign</th>
                 <th>Project</th>
                 <th>Call Date</th>
@@ -101,7 +103,9 @@
 
                     @foreach ($voice_audits as $audit)
                         <tr>
+                            <td>{{ $audit->associate->hrms_id ?? '' }}</td>
                             <td>{{ $audit->associate->name ?? '' }}</td>
+                            <td>{{ $audit->teamLead->name ?? 'undefined' }}</td>
                             <td>{{ $audit->campaign->name ?? '' }}</td>
                             <td>{{ $audit->project->name ?? '' }}</td>
                             <td>{{ $audit->call_date ?? '' }}</td>

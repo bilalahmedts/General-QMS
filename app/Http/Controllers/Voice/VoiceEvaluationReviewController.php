@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\MyVoiceEvaluationReviewTrait;
 use App\Http\Requests\VoiceReviewAppealRequest;
+use App\Models\Project;
 use App\Models\VoiceAuditAppeal;
 use App\Models\VoiceEvaluationAction;
 
@@ -45,6 +46,7 @@ class VoiceEvaluationReviewController extends Controller
 
         if(in_array(Auth::user()->roles[0]->name, ['Director','Team Lead', 'Manager']) && Auth::user()->campaign_id != 1){
             $query = $query->where('campaign_id', Auth::user()->campaign_id);
+            // $query = $query->where('project_id', Auth::user()->project_id);
         }
 
         if($status == 'pending'){
@@ -60,8 +62,9 @@ class VoiceEvaluationReviewController extends Controller
 
         $users = User::orderBy('name', 'asc')->get();
         $campaigns = Campaign::where('status', 'active')->orderBy('name', 'asc')->get();
+        $projects = Project::orderBy('name', 'asc')->get();
 
-        return view('voice-evaluation-reviews.index')->with(compact('voice_audits', 'users', 'campaigns', 'status'));
+        return view('voice-evaluation-reviews.index')->with(compact('voice_audits', 'users', 'campaigns', 'status','projects'));
     }
 
     /**

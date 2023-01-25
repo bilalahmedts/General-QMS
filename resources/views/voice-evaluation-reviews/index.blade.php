@@ -25,16 +25,29 @@
 
         <input type="hidden" name="search" value="1">
         @php
-            $record_id = '';
-            $associate_id = -1;
-            $outcome = -1;
+            
+            $associate_id = '';
+            $campaign_id = '';
+            $project_id = '';
+            $outcome = '';
             $from_date = '';
             $to_date = '';
 
             if(isset($_GET['search'])){
-                $associate_id = $_GET['associate_id'];
-                $outcome = $_GET['outcome'];
-
+                
+                
+                if (!empty($_GET['outcome'])) {
+                    $outcome = $_GET['outcome'];
+                }
+                if (!empty($_GET['associate_id'])) {
+                    $associate_id = $_GET['associate_id'];
+                }
+                if (!empty($_GET['campaign_id'])) {
+                    $campaign_id = $_GET['campaign_id'];
+                }
+                if (!empty($_GET['project_id'])) {
+                    $project_id = $_GET['project_id'];
+                }
                 if (!empty($_GET['from_date'])) {
                     $from_date = $_GET['from_date'];
                 }
@@ -54,13 +67,30 @@
                     <div class="form-group col-md-4">
                         <label for="">Select Associate</label>
                         <select name="associate_id" class="form-control select2">
-                            <option value="-1">Select Option</option>
+                            <option value="">Select Option</option>
                             @foreach ($users as $user)
                                 <option value="{{ $user->id }}" @if($user->id == $associate_id) selected @endif>{{ $user->name }}</option>
                             @endforeach
                         </select>
                     </div>
-
+                    <div class="form-group col-md-4">
+                        <label for="">Select Campaign</label>
+                        <select name="campaign_id" class="form-control select2">
+                            <option value="">Select Option</option>
+                            @foreach ($campaigns as $campaign)
+                                <option value="{{ $campaign->id }}" @if($campaign->id == $campaign_id) selected @endif>{{ $campaign->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="">Select Project</label>
+                        <select name="project_id" class="form-control select2">
+                            <option value="">Select Option</option>
+                            @foreach ($projects as $project)
+                                <option value="{{ $project->id }}" @if($project->id == $project_id) selected @endif>{{ $project->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="form-group col-md-4">
                         <label for="">Select Outcome</label>
                         <select name="outcome" class="form-control select2">
@@ -105,7 +135,10 @@
         <table class="table table-bordered">
             <thead>
               <tr>
+                <th>#</th>
+                <th>HRMS ID</th>
                 <th>@sortablelink('associate_id', 'Associate')</th>
+                <th>@sortablelink('team_lead_id', 'Team Lead')</th>
                 <th>@sortablelink('campaign_id', 'Campaign')</th>
                 <th>@sortablelink('project_id', 'Project')</th>
                 <th>@sortablelink('call_date', 'Call Date')</th>
@@ -120,9 +153,12 @@
 
                 @if(count($voice_audits) > 0)
 
-                    @foreach ($voice_audits as $audit)
+                    @foreach ($voice_audits as $key => $audit)
                         <tr>
+                            <td>{{ $voice_audits->firstItem() + $key }}</td>
+                            <td>{{ $audit->associate->hrms_id ?? 'undefined' }}</td>
                             <td>{{ $audit->associate->name ?? 'undefined' }}</td>
+                            <td>{{ $audit->teamLead->name ?? 'undefined' }}</td>
                             <td>{{ $audit->campaign->name ?? 'undefined' }}</td>
                             <td>{{ $audit->project->name ?? 'undefined' }}</td>
                             <td>{{ $audit->call_date ?? '' }}</td>
