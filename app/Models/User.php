@@ -22,16 +22,7 @@ class User extends Authenticatable
      *
      * @var string[]
      */
-    protected $fillable = [
-        'id',
-        'name',
-        'email',
-        'password',
-        'plain_password',
-        'hrms_id',
-        'campaign_id',
-        'reporting_to'
-    ];
+    protected $guarded = [];
 
     public $sortable = [
         'id',
@@ -119,6 +110,7 @@ class User extends Authenticatable
         return $this->hasMany(VoiceAudit::class, 'associate_id', 'id')->where('voice_evaluation_id', 1);
     }
 
+
     public function scopeSearch($query, $request){
 
         if ($request->has('id')) {
@@ -163,4 +155,6 @@ class User extends Authenticatable
 
         return $query;
     }
+    
+
 }

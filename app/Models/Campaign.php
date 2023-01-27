@@ -89,4 +89,14 @@ class Campaign extends Model
         return $this->hasMany(VoiceAudit::class, 'campaign_id', 'id')->where('voice_evaluation_id', 1);
     }
 
+    public function projects()
+    {
+        return $this->hasMany(Project::class,'campaign_id','id');
+    }
+
+    // public function user()
+    // {
+    //     return $this->hasOne(User::class, 'campaign_id', 'id');
+    // }
+
 }

@@ -135,7 +135,11 @@
                         <th class="text-center">Fatal</th>
                         <th class="text-center">Good</th>
                         <th class="text-center">QA Percentage</th>
+                        @if (
+                            (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) && Auth::user()->campaign_id == 1) ||
+                                in_array(Auth::user()->roles[0]->name, ['Super Admin']))
                         <th class="action">Action</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -187,10 +191,14 @@
                                 <td class="text-center">{{ $fatal }}</td>
                                 <td class="text-center">{{ $good }}</td>
                                 <td class="text-center">{{ round($total_percentage) }}%</td>
+                                @if (
+                            (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) && Auth::user()->campaign_id == 1) ||
+                                in_array(Auth::user()->roles[0]->name, ['Super Admin']))
                                 <td class="action">
                                     <a href="{{ route('voice-audits.index', 1) }}?search=1&record_id=&user_id=&associate_id={{ $item->id }}&campaign_id=&outcome=&from_date={{ $from_date }}&to_date={{ $to_date }}&from_time={{ $from_time }}&to_time={{ $to_time }}&review="
                                         class="btn btn-success btn-sm" target="_blank"><i class="fas fa-eye"></i></a>
                                 </td>
+                                @endif
                             </tr>
                         @endforeach
                     @else

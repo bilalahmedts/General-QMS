@@ -100,6 +100,15 @@
                     </select>
                 </div>
             </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Assign Projects</label>
+                <select name="projects[]" id="projects" class="form-control select2" multiple>
+                    @foreach ($projects as $project)
+                        <option value="{{ $project->id }}">{{ $project->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>

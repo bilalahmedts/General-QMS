@@ -146,8 +146,8 @@ class VoiceReportController extends Controller
         $user_evaluations = $query->paginate(15);
 
         $users = User::role('Team Lead')->orderBy('name', 'asc')->get();
-
-        return view('voice-reports.team-leads')->with(compact('users', 'user_evaluations'));
+        $campaigns = Campaign::where('status', 'active')->orderBy('name', 'asc')->get();
+        return view('voice-reports.team-leads')->with(compact('users', 'user_evaluations','campaigns'));
     }
 
 

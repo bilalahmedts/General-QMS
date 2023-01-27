@@ -14,4 +14,9 @@ class Project extends Model
     use HasFactory, SoftDeletes, HasRelationships, BelongsToThrough, HasEagerLimit;
 
     protected $fillable = [];
+
+    // public function campaign()
+    // {
+    //     return $this->hasOne(Campaign::class, 'id', 'campaign_id');
+    // }
 }

@@ -103,10 +103,11 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
+                        <th>HRMS ID</th>
                         <th>@sortablelink('name', 'Name')</th>
-                        <th>@sortablelink('email', 'Email')</th>
                         <th>Reporting To</th>
                         <th>Campaign</th>
+                        {{-- <th>Assigned Projects</th> --}}
                         <th>Role</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -116,10 +117,11 @@
                     @if (count($users) > 0)
                         @foreach ($users as $user)
                             <tr>
+                                <td>{{ $user->hrms_id ?? '' }}</td>
                                 <td>{{ $user->name ?? '-' }}</td>
-                                <td>{{ $user->email ?? '-' }}</td>
                                 <td>{{ $user->supervisor->name ?? '-' }}</td>
                                 <td>{{ $user->campaign->name ?? '' }}</td>
+                                {{-- <td></td> --}}
                                 <td>{{ $user->roles[0]->name ?? '-' }}</td>
                                 <td>
                                     @if ($user->status == 'active')

@@ -202,6 +202,7 @@
                         <th>#</th>
                         <th>@sortablelink('user_id', 'Evaluator')</th>
                         <th>@sortablelink('associate_id', 'Associate')</th>
+                        <th>Reporting To</th>
                         <th>@sortablelink('campaign_id', 'Campaign')</th>
                         <th>@sortablelink('project_id', 'Project')</th>
                         <th>Evaluation Time</th>
@@ -224,6 +225,7 @@
                                 <td>{{ $voice_audits->firstItem() + $key }}</td>
                                 <td>{{ $audit->user->name ?? 'undefined' }}</td>
                                 <td>{{ $audit->associate->name ?? 'undefined' }}</td>
+                                <td>{{ $audit->associate->supervisor->name ?? '' }}</td>
                                 <td>{{ $audit->campaign->name ?? 'undefined' }}</td>
                                 <td>{{ $audit->project->name ?? '' }}</td>
                                 <td>{{ $audit->evaluation_time }}</td>
