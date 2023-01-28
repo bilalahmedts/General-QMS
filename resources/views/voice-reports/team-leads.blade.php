@@ -132,107 +132,36 @@
                     @if (count($user_evaluations) > 0)
                         @foreach ($user_evaluations as $key => $item)
                             @php
-                                $aboveAverageEddyEdu = 0;
-                                $averageEddyEdu = 0;
-                                $badEddyEdu = 0;
-                                $fatalEddyEdu = 0;
-                                $goodEddyEdu = 0;
-                                $otherEddyEdu = 0;
-                                
-                                $aboveAverageEddyIB = 0;
-                                $averageEddyIB = 0;
-                                $badEddyIB = 0;
-                                $fatalEddyIB = 0;
-                                $goodEddyIB = 0;
-                                $otherEddyIB = 0;
-                                
-                                $aboveAverageEddyOB = 0;
-                                $averageEddyOB = 0;
-                                $badEddyOB = 0;
-                                $fatalEddyOB = 0;
-                                $goodEddyOB = 0;
-                                $otherEddyOB = 0;
-                                
-                                $aboveAverageGuidance = 0;
-                                $averageGuidance = 0;
-                                $badGuidance = 0;
-                                $fatalGuidance = 0;
-                                $goodGuidance = 0;
-                                $otherGuidance = 0;
-                                
-                                $aboveAverageDSS = 0;
-                                $averageDSS = 0;
-                                $badDSS = 0;
-                                $fatalDSS = 0;
-                                $goodDSS = 0;
-                                $otherDSS = 0;
-                                
+
+                                $aboveAverage = [];
+                                $average = [];
+                                $bad = [];
+                                $fatal = [];
+                                $good = [];
+                                $other = [];
+
                                 if (count($item->teamLeadVoiceAudits) > 0) {
                                     foreach ($item->teamLeadVoiceAudits as $audit) {
-                                        if ($audit->project_id == 1 && $audit->rating == 'above average') {
-                                            $aboveAverageEddyEdu++;
-                                        } elseif ($audit->project_id == 1 && $audit->rating == 'average') {
-                                            $averageEddyEdu++;
-                                        } elseif ($audit->project_id == 1 && $audit->rating == 'bad') {
-                                            $badEddyEdu++;
-                                        } elseif ($audit->project_id == 1 && $audit->rating == 'fatal') {
-                                            $fatalEddyEdu++;
-                                        } elseif ($audit->project_id == 1 && $audit->rating == 'good') {
-                                            $goodEddyEdu++;
-                                        } else {
-                                            $otherEddyEdu++;
-                                        }
-                                        if ($audit->project_id == 2 && $audit->rating == 'above average') {
-                                            $aboveAverageEddyIB++;
-                                        } elseif ($audit->project_id == 2 && $audit->rating == 'average') {
-                                            $averageEddyIB++;
-                                        } elseif ($audit->project_id == 2 && $audit->rating == 'bad') {
-                                            $badEddyIB++;
-                                        } elseif ($audit->project_id == 2 && $audit->rating == 'fatal') {
-                                            $fatalEddyIB++;
-                                        } elseif ($audit->project_id == 2 && $audit->rating == 'good') {
-                                            $goodEddyIB++;
-                                        } else {
-                                            $otherEddyIB++;
-                                        }
-                                        if ($audit->project_id == 3 && $audit->rating == 'above average') {
-                                            $aboveAverageEddyOB++;
-                                        } elseif ($audit->project_id == 3 && $audit->rating == 'average') {
-                                            $averageEddyOB++;
-                                        } elseif ($audit->project_id == 3 && $audit->rating == 'bad') {
-                                            $badEddyOB++;
-                                        } elseif ($audit->project_id == 3 && $audit->rating == 'fatal') {
-                                            $fatalEddyOB++;
-                                        } elseif ($audit->project_id == 3 && $audit->rating == 'good') {
-                                            $goodEddyOB++;
-                                        } else {
-                                            $otherEddyOB++;
-                                        }
-                                        if ($audit->project_id == 4 && $audit->rating == 'above average') {
-                                            $aboveAverageGuidance++;
-                                        } elseif ($audit->project_id == 4 && $audit->rating == 'average') {
-                                            $averageGuidance++;
-                                        } elseif ($audit->project_id == 4 && $audit->rating == 'bad') {
-                                            $badGuidance++;
-                                        } elseif ($audit->project_id == 4 && $audit->rating == 'fatal') {
-                                            $fatalGuidance++;
-                                        } elseif ($audit->project_id == 4 && $audit->rating == 'good') {
-                                            $goodGuidance++;
-                                        } else {
-                                            $otherGuidance++;
-                                        }
-                                        if ($audit->project_id == 5 && $audit->rating == 'above average') {
-                                            $aboveAverageGuidance++;
-                                        } elseif ($audit->project_id == 5 && $audit->rating == 'average') {
-                                            $averageGuidance++;
-                                        } elseif ($audit->project_id == 5 && $audit->rating == 'bad') {
-                                            $badGuidance++;
-                                        } elseif ($audit->project_id == 5 && $audit->rating == 'fatal') {
-                                            $fatalGuidance++;
-                                        } elseif ($audit->project_id == 5 && $audit->rating == 'good') {
-                                            $goodGuidance++;
-                                        } else {
-                                            $otherGuidance++;
+                                        $project_ids = [];        
+                                        $projects = $audit->campaign->projects;
+                                        foreach ($projects as $project) {
+                                            array_push($project_ids, $project->id);
+                                            foreach ($project_ids as $project_id) {
+                                                // echo $project_id.' - '.$project->id."<br>";
+                                                if ($project_id == $project->id && $audit->rating == 'above average') {
+                                                    $aboveAverage[$audit->team_lead_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getTlvCount($audit->team_lead_id, 'above average', $project->id);
+                                                } elseif ($project_id == $project->id && $audit->rating == 'average') {
+                                                    $average[$audit->team_lead_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getTlvCount($audit->team_lead_id, 'average', $project->id);
+                                                } elseif ($project_id == $project->id && $audit->rating == 'bad') {
+                                                    $bad[$audit->team_lead_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getTlvCount($audit->team_lead_id, 'bad', $project->id);
+                                                } elseif ($project_id == $project->id && $audit->rating == 'fatal') {
+                                                    $fatal[$audit->team_lead_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getTlvCount($audit->team_lead_id, 'fatal', $project->id);
+                                                } elseif ($project_id == $project->id && $audit->rating == 'good') {
+                                                    $good[$audit->team_lead_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getTlvCount($audit->team_lead_id, 'good', $project->id);
+                                                } else {
+                                                    $other[$audit->team_lead_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getTlvCount($audit->team_lead_id, 'other', $project->id);
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -247,100 +176,40 @@
                                             <div>{{ $project->name ?? '' }}</div>
                                         @endforeach
                                     @endif
-                                </td>
+                                </td>  
                                 <td class="text-center">
-                                    @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) ||
-                                            (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
-                                                (Auth::user()->campaign_id == 1 || Auth::user()->campaign_id == 2)))
-                                        <div>{{ $aboveAverageEddyEdu }}</div>
-                                        <div>{{ $aboveAverageEddyIB }}</div>
-                                        <div>{{ $aboveAverageEddyOB }}</div>
-                                    @endif
-                                    @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) ||
-                                            (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
-                                                (Auth::user()->campaign_id == 1 || Auth::user()->campaign_id == 3)))
-                                        <div>{{ $aboveAverageGuidance }}</div>
-                                    @endif
-                                    @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) ||
-                                            (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
-                                                (Auth::user()->campaign_id == 1 || Auth::user()->campaign_id == 4)))
-                                        <div>{{ $aboveAverageDSS }}</div>
+                                    @if ($item->campaign->projects)
+                                        @foreach ($item->campaign->projects as $project)
+                                            <div>{{ $aboveAverage[$item->id][$project->id] ?? 0 }}</div>
+                                        @endforeach
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) ||
-                                            (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
-                                                (Auth::user()->campaign_id == 1 || Auth::user()->campaign_id == 2)))
-                                        <div>{{ $averageEddyEdu }}</div>
-                                        <div>{{ $averageEddyIB }}</div>
-                                        <div>{{ $averageEddyOB }}</div>
-                                    @endif
-                                    @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) ||
-                                            (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
-                                                (Auth::user()->campaign_id == 1 || Auth::user()->campaign_id == 3)))
-                                        <div>{{ $averageGuidance }}</div>
-                                    @endif
-                                    @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) ||
-                                            (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
-                                                (Auth::user()->campaign_id == 1 || Auth::user()->campaign_id == 4)))
-                                        <div>{{ $averageDSS }}</div>
+                                    @if ($item->campaign->projects)
+                                        @foreach ($item->campaign->projects as $project)
+                                            <div>{{ $average[$item->id][$project->id] ?? 0 }}</div>
+                                        @endforeach
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) ||
-                                            (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
-                                                (Auth::user()->campaign_id == 1 || Auth::user()->campaign_id == 2)))
-                                        <div>{{ $badEddyEdu }}</div>
-                                        <div>{{ $badEddyIB }}</div>
-                                        <div>{{ $badEddyOB }}</div>
-                                    @endif
-                                    @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) ||
-                                            (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
-                                                (Auth::user()->campaign_id == 1 || Auth::user()->campaign_id == 3)))
-                                        <div>{{ $badGuidance }}</div>
-                                    @endif
-                                    @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) ||
-                                            (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
-                                                (Auth::user()->campaign_id == 1 || Auth::user()->campaign_id == 4)))
-                                        <div>{{ $badDSS }}</div>
+                                    @if ($item->campaign->projects)
+                                        @foreach ($item->campaign->projects as $project)
+                                            <div>{{ $bad[$item->id][$project->id] ?? 0 }}</div>
+                                        @endforeach
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) ||
-                                            (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
-                                                (Auth::user()->campaign_id == 1 || Auth::user()->campaign_id == 2)))
-                                        <div>{{ $fatalEddyEdu }}</div>
-                                        <div>{{ $fatalEddyIB }}</div>
-                                        <div>{{ $fatalEddyOB }}</div>
-                                    @endif
-                                    @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) ||
-                                            (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
-                                                (Auth::user()->campaign_id == 1 || Auth::user()->campaign_id == 3)))
-                                        <div>{{ $fatalGuidance }}</div>
-                                    @endif
-                                    @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) ||
-                                            (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
-                                                (Auth::user()->campaign_id == 1 || Auth::user()->campaign_id == 4)))
-                                        <div>{{ $fatalDSS }}</div>
+                                    @if ($item->campaign->projects)
+                                        @foreach ($item->campaign->projects as $project)
+                                            <div>{{ $fatal[$item->id][$project->id] ?? 0 }}</div>
+                                        @endforeach
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) ||
-                                            (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
-                                                (Auth::user()->campaign_id == 1 || Auth::user()->campaign_id == 2)))
-                                        <div>{{ $goodEddyEdu }}</div>
-                                        <div>{{ $goodEddyIB }}</div>
-                                        <div>{{ $goodEddyOB }}</div>
-                                    @endif
-                                    @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) ||
-                                            (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
-                                                (Auth::user()->campaign_id == 1 || Auth::user()->campaign_id == 3)))
-                                        <div>{{ $goodGuidance }}</div>
-                                    @endif
-                                    @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) ||
-                                            (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
-                                                (Auth::user()->campaign_id == 1 || Auth::user()->campaign_id == 4)))
-                                        <div>{{ $goodDSS }}</div>
+                                    @if ($item->campaign->projects)
+                                        @foreach ($item->campaign->projects as $project)
+                                            <div>{{ $good[$item->id][$project->id] ?? 0 }}</div>
+                                        @endforeach
                                     @endif
                                 </td>
 

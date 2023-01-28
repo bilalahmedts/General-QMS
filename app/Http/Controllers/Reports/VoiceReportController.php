@@ -149,8 +149,10 @@ class VoiceReportController extends Controller
         $campaigns = Campaign::where('status', 'active')->orderBy('name', 'asc')->get();
         return view('voice-reports.team-leads')->with(compact('users', 'user_evaluations','campaigns'));
     }
-
-
+    public static function getTlvCount($team_lead_id, $rating, $project_id){
+         $count = VoiceAudit::where('team_lead_id', $team_lead_id)->where('rating', $rating)->where('project_id', $project_id)->count();
+         return $count;
+    }
     public function associates(Request $request)
     {
         $query = new User;
