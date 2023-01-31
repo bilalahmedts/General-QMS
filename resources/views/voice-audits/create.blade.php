@@ -94,6 +94,7 @@
                             <input type="text" class="form-control" id="reporting_to" disabled>
                         </div>
                     </div>
+                    <input type="hidden" name="manager_id" id="manager_id">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="">Call Date <span>*</span></label>
@@ -447,12 +448,14 @@
                             $("#hrms_id").val(res.hrms_id);
                             $("#reporting_id").val(res.reporting_id);
                             $("#reporting_to").val(res.reporting_to);
+                            $("#manager_id").val(res.manager_id);
                         }
                     });
                 } else {
                     $("#hrms_id").val('');
                     $("#reporting_id").val('');
                     $("#reporting_to").val('');
+                    $("#manager_id").val('');
                 }
             });
             $("#duration").inputmask({

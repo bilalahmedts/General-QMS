@@ -1,6 +1,6 @@
 @extends('layouts.user')
 
-@section('title', 'Team Leads Report')
+@section('title', 'Managers Report')
 
 
 @section('content')
@@ -20,7 +20,7 @@
 
         </div>
 
-        <form action="{{ route('voice-reports.team-leads') }}" method="get" autocomplete="off">
+        <form action="{{ route('voice-reports.managers') }}" method="get" autocomplete="off">
             <input type="hidden" name="search" value="1">
             @php
                 $search_id = '';
@@ -32,6 +32,7 @@
                 $to_time = '';
                 
                 if (isset($_GET['search'])) {
+                   
                     if (!empty($_GET['id'])) {
                         $search_id = $_GET['id'];
                     }
@@ -66,8 +67,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        @if (
-                            (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) && Auth::user()->campaign_id == 1) ||
+                        @if ((in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) && Auth::user()->campaign_id == 1) ||
                                 in_array(Auth::user()->roles[0]->name, ['Super Admin']))
                             <div class="form-group col-md-4">
                                 <label for="">Select Campaign</label>
@@ -108,7 +108,7 @@
                 </div>
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary">Search</button>
-                    <a href="{{ route('voice-reports.team-leads') }}" class="ml-5">Clear Search</a>
+                    <a href="{{ route('voice-reports.managers') }}" class="ml-5">Clear Search</a>
                 </div>
             </div>
         </form>
@@ -118,7 +118,7 @@
     <!-- Default box -->
     <div class="card card-primary card-outline">
         <div class="card-header">
-            <h3 class="card-title">Team Leads Report</h3>
+            <h3 class="card-title">Managers Report</h3>
         </div>
 
         <div class="card-body">
@@ -127,7 +127,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Team Lead Name</th>
+                        <th>Manager Name</th>
                         <th>Campaign</th>
                         <th>Project</th>
                         <th class="text-center">Above Average</th>
@@ -150,8 +150,7 @@
                                 $fatal = [];
                                 $good = [];
                                 $other = [];
-                                $total = [];
-                                
+
                                 $aboveAverageCount = 0;
                                 $averageCount = 0;
                                 $badCount = 0;
@@ -159,8 +158,8 @@
                                 $fatalCount = 0;
                                 $otherCount = 0;
                                 
-                                if (count($item->teamLeadVoiceAudits) > 0) {
-                                    foreach ($item->teamLeadVoiceAudits as $audit) {
+                                if (count($item->managerVoiceAudits) > 0) {
+                                    foreach ($item->managerVoiceAudits as $audit) {
                                         $project_ids = [];
                                         $projects = $audit->campaign->projects;
                                         foreach ($projects as $project) {
@@ -168,26 +167,26 @@
                                             foreach ($project_ids as $project_id) {
                                                 // echo $project_id.' - '.$project->id."<br>";
                                                 if ($project_id == $project->id && $audit->rating == 'above average') {
-                                                    $aboveAverage[$audit->team_lead_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getTlvCount($audit->team_lead_id, 'above average', $project->id);
-                                                    $aboveAverageCount = $aboveAverage[$audit->team_lead_id][$project->id];
+                                                    $aboveAverage[$audit->manager_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getManagervCount($audit->manager_id, 'above average', $project->id);
+                                                    $aboveAverageCount = $aboveAverage[$audit->manager_id][$project->id];
                                                 } elseif ($project_id == $project->id && $audit->rating == 'average') {
-                                                    $average[$audit->team_lead_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getTlvCount($audit->team_lead_id, 'average', $project->id);
-                                                    $averageCount = $average[$audit->team_lead_id][$project->id];
+                                                    $average[$audit->manager_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getManagervCount($audit->manager_id, 'average', $project->id);
+                                                    $averageCount = $average[$audit->manager_id][$project->id];
                                                 } elseif ($project_id == $project->id && $audit->rating == 'bad') {
-                                                    $bad[$audit->team_lead_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getTlvCount($audit->team_lead_id, 'bad', $project->id);
-                                                    $badCount = $bad[$audit->team_lead_id][$project->id];
+                                                    $bad[$audit->manager_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getManagervCount($audit->manager_id, 'bad', $project->id);
+                                                    $badCount = $bad[$audit->manager_id][$project->id];
                                                 } elseif ($project_id == $project->id && $audit->rating == 'fatal') {
-                                                    $fatal[$audit->team_lead_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getTlvCount($audit->team_lead_id, 'fatal', $project->id);
-                                                    $fatalCount = $fatal[$audit->team_lead_id][$project->id];
+                                                    $fatal[$audit->manager_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getManagervCount($audit->manager_id, 'fatal', $project->id);
+                                                    $fatalCount = $fatal[$audit->manager_id][$project->id];
                                                 } elseif ($project_id == $project->id && $audit->rating == 'good') {
-                                                    $good[$audit->team_lead_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getTlvCount($audit->team_lead_id, 'good', $project->id);
-                                                    $goodCount = $good[$audit->team_lead_id][$project->id];
+                                                    $good[$audit->manager_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getManagervCount($audit->manager_id, 'good', $project->id);
+                                                    $goodCount = $good[$audit->manager_id][$project->id];
                                                 } else {
-                                                    $other[$audit->team_lead_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getTlvCount($audit->team_lead_id, 'other', $project->id);
-                                                    $otherCount = $other[$audit->team_lead_id][$project->id];
+                                                    $other[$audit->manager_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getManagervCount($audit->manager_id, 'other', $project->id);
+                                                    $otherCount = $other[$audit->manager_id][$project->id];
                                                 }
                                             }
-                                            $total[$audit->team_lead_id][$project->id]['total_count'] = $aboveAverageCount + $averageCount + $badCount + $fatalCount + $goodCount + $otherCount;
+                                            $total[$audit->manager_id][$project->id]['total_count'] = $aboveAverageCount + $averageCount + $badCount + $fatalCount + $goodCount + $otherCount;
                                         }
                                     }
                                 }
@@ -242,7 +241,7 @@
                                     @if ($item->campaign->projects)
                                         @foreach ($item->campaign->projects as $project)
                                             <div>
-                                                {{ round(($total[$item->id][$project->id]['total_count'] / count($item->teamLeadVoiceAudits)) * 100) }} %
+                                                {{ round(($total[$item->id][$project->id]['total_count'] / count($item->managerVoiceAudits)) * 100) }} %
                                             </div>
                                         @endforeach
                                     @endif

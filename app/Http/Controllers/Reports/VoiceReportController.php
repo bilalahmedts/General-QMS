@@ -133,7 +133,6 @@ class VoiceReportController extends Controller
             }
             );
         });
-
         $query = $query->with('teamLeadVoiceAudits', function ($query) use ($request) {
             $query = $query->when($request, function ($query, $request) {
                 $query->search($request);
@@ -147,10 +146,49 @@ class VoiceReportController extends Controller
 
         $users = User::role('Team Lead')->orderBy('name', 'asc')->get();
         $campaigns = Campaign::where('status', 'active')->orderBy('name', 'asc')->get();
-        return view('voice-reports.team-leads')->with(compact('users', 'user_evaluations','campaigns'));
+        $projects = Project::orderBy('name', 'asc')->get();
+        return view('voice-reports.team-leads')->with(compact('users', 'user_evaluations','campaigns','projects'));
     }
     public static function getTlvCount($team_lead_id, $rating, $project_id){
          $count = VoiceAudit::where('team_lead_id', $team_lead_id)->where('rating', $rating)->where('project_id', $project_id)->count();
+         return $count;
+    }
+    public function managers(Request $request)
+    {
+        $query = new User;
+        if (in_array(Auth::user()->roles[0]->name, ['Director', 'Team Lead', 'Manager']) && Auth::user()->campaign_id != 1) {
+            $query = $query->where('campaign_id', Auth::user()->campaign_id);
+        }
+        $query = $query->role('Manager');
+
+        $query = $query->when($request, function ($query, $request) {
+            $query->search($request);
+        });
+
+        $query = $query->whereHas('managerVoiceAudits', function ($query) use ($request) {
+            $query = $query->when($request, function ($query, $request) {
+                $query->search($request);
+            }
+            );
+        });
+        $query = $query->with('managerVoiceAudits', function ($query) use ($request) {
+            $query = $query->when($request, function ($query, $request) {
+                $query->search($request);
+            }
+            );
+        });
+
+        $query = $query->orderBy('name', 'asc');
+
+        $user_evaluations = $query->paginate(15);
+
+        $users = User::role('Manager')->orderBy('name', 'asc')->get();
+        $campaigns = Campaign::where('status', 'active')->orderBy('name', 'asc')->get();
+        $projects = Project::orderBy('name', 'asc')->get();
+        return view('voice-reports.managers')->with(compact('users', 'user_evaluations','campaigns','projects'));
+    }
+    public static function getManagervCount($manager_id, $rating, $project_id){
+         $count = VoiceAudit::where('manager_id', $manager_id)->where('rating', $rating)->where('project_id', $project_id)->count();
          return $count;
     }
     public function associates(Request $request)

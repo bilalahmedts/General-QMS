@@ -105,13 +105,7 @@
             @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']) ||
                     (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) &&
                         Auth::user()->campaign_id == 1))
-                <li class="nav-item">
-                    <a href="{{ route('voice-reports.campaigns') }}?search=1&campaign_id=&from_date={{ now()->startOfMonth()->format('d/m/Y') }}&to_date={{ now()->endOfMonth()->format('d/m/Y') }}"
-                        class="nav-link {{ request()->is('voice-reports/campaigns', 'voice-reports/campaigns/*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-book"></i>
-                        <p>Campaigns Report</p>
-                    </a>
-                </li>
+                
                 <li class="nav-item">
                     <a href="{{ route('voice-reports.evaluators') }}?search=1&search_id=&from_date={{ now()->startOfMonth()->format('d/m/Y') }}&to_date={{ now()->endOfMonth()->format('d/m/Y') }}"
                         class="nav-link {{ request()->is('voice-reports/evaluators', 'voice-reports/evaluators/*') ? 'active' : '' }}">
@@ -143,10 +137,24 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('voice-reports.campaigns') }}?search=1&campaign_id=&from_date={{ now()->startOfMonth()->format('d/m/Y') }}&to_date={{ now()->endOfMonth()->format('d/m/Y') }}"
+                        class="nav-link {{ request()->is('voice-reports/campaigns', 'voice-reports/campaigns/*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>Campaigns Report</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('voice-reports.team-leads') }}?search=1&search_id=&from_date={{ now()->startOfMonth()->format('d/m/Y') }}&to_date={{ now()->endOfMonth()->format('d/m/Y') }}"
                         class="nav-link {{ request()->is('voice-reports/team-leads', 'voice-reports/team-leads/*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-user-md"></i>
                         <p>Team Leads Report</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('voice-reports.managers') }}?search=1&search_id=&from_date={{ now()->startOfMonth()->format('d/m/Y') }}&to_date={{ now()->endOfMonth()->format('d/m/Y') }}"
+                        class="nav-link {{ request()->is('voice-reports/managers', 'voice-reports/managers/*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-male"></i>
+                        <p>Managers Report</p>
                     </a>
                 </li>
             @endif

@@ -28,15 +28,18 @@ trait UserTrait
         $user = User::findOrFail($user_id);
         $reporting_id = '';
         $reporting_to = '';
+        $manager_id = '';
         $hrms_id = $user->hrms_id;
         if ($user->supervisor) {
             $reporting_to = $user->supervisor->name;
             $reporting_id = $user->supervisor->id;
+            $manager_id = $user->supervisor->reporting_to;
         }
         $data = [
             'hrms_id' => $hrms_id,
             'reporting_to' => $reporting_to,
             'reporting_id' => $reporting_id,
+            'manager_id' => $manager_id
         ];
         return response()->json($data, 200);
     }

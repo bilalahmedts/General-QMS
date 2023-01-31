@@ -117,6 +117,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/evaluators', [VoiceReportController::class, 'evaluators'])->name('voice-reports.evaluators');
         Route::get('/campaigns', [VoiceReportController::class, 'campaigns'])->name('voice-reports.campaigns');
         Route::get('/team-leads', [VoiceReportController::class, 'teamLeads'])->name('voice-reports.team-leads');
+        Route::get('/managers', [VoiceReportController::class, 'managers'])->name('voice-reports.managers');
         Route::get('/associates', [VoiceReportController::class, 'associates'])->name('voice-reports.associates');
         Route::get('/fatals', [VoiceReportController::class, 'fatals'])->name('voice-reports.fatals');
     });

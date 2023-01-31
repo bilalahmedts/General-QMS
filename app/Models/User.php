@@ -110,7 +110,10 @@ class User extends Authenticatable
         return $this->hasMany(VoiceAudit::class, 'associate_id', 'id')->where('voice_evaluation_id', 1);
     }
 
-
+    public function managerVoiceAudits()
+    {
+        return $this->hasMany(VoiceAudit::class, 'manager_id', 'id')->where('voice_evaluation_id', 1);
+    }
     public function scopeSearch($query, $request){
 
         if ($request->has('id')) {
@@ -118,6 +121,11 @@ class User extends Authenticatable
                 $query = $query->where('id', $request->id);
             }
         }
+        // if ($request->has('search_id')) {
+        //     if (!empty($request->search_id)) {
+        //         $query = $query->where('id', $request->search_id);
+        //     }
+        // }
         if ($request->has('name')) {
             if (!empty($request->name)) {
                 $query = $query->where('name', 'LIKE', "%{$request->name}%");
