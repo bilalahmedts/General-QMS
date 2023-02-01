@@ -30,6 +30,7 @@ class VoiceAudit extends Model
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
+
     public function manager()
     {
         return $this->hasOne(User::class, 'id', 'manager_id');

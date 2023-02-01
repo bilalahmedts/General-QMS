@@ -6,6 +6,7 @@
             <th>Call Date</th>
             <th>Customer Name</th>
             <th>Customer Phone</th>
+            <th>HRMS ID</th>
             <th>Associate</th>
             <th>Reporting To</th>
             <th>Campaign</th>
@@ -14,11 +15,6 @@
             <th>Handling Time</th>
             <th>Call Time</th>
             <th>Evaluation Date</th>
-            <th>Communication</th>
-            <th>Sales</th>
-            <th>Compliance</th>
-            <th>Customer Service</th>
-            <th>Product Presentation</th>
             <th>QA Notes</th>
             <th>Recording Link</th>
         </tr>
@@ -34,6 +30,7 @@
                 <td>{{ $audit->call_date }}</td>
                 <td>{{ $audit->customer_name ?? '' }}</td>
                 <td>{{ $audit->customer_phone ?? '' }}</td>
+                <td>{{ $audit->associate->hrms_id ?? '' }}</td>
                 <td>{{ $audit->associate->name ?? '' }}</td>
                 <td>{{ $audit->associate->supervisor->name ?? '' }}</td>
                 <td>{{ $audit->campaign->name ?? '' }}</td>
@@ -56,11 +53,6 @@
                 <td>{{ $audit->evaluation_time }}</td>
                 <td>{{ $audit->recording_duration }}</td>
                 <td>{{ $audit->created_at->format('d-m-Y g:i:s A') }}</td>
-                <td>{{ $audit->communication }}</td>
-                <td>{{ $audit->sales }}</td>
-                <td>{{ $audit->compliance }}</td>
-                <td>{{ $audit->customer_service }}</td>
-                <td>{{ $audit->product_presentation }}</td>
                 <td>{{ $audit->notes }}</td>
                 <td>{{ $audit->recording_link ?? '' }}</td>
             </tr>

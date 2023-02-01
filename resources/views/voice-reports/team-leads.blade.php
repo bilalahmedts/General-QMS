@@ -25,7 +25,6 @@
             @php
                 $search_id = '';
                 $campaign_id = '';
-                // $project_id = '';
                 $from_date = '';
                 $to_date = '';
                 $from_time = '';
@@ -38,9 +37,7 @@
                     if (!empty($_GET['campaign_id'])) {
                         $campaign_id = $_GET['campaign_id'];
                     }
-                    // if (!empty($_GET['project_id'])) {
-                    //     $project_id = $_GET['project_id'];
-                    // }
+                
                     if (!empty($_GET['from_date'])) {
                         $from_date = $_GET['from_date'];
                     }
@@ -81,18 +78,6 @@
                                 </select>
                             </div>
                         @endif
-
-                        {{-- <div class="form-group col-md-4">
-                            <label for="">Select Project</label>
-                            <select name="project_id" class="form-control select2">
-                                <option value="">Select Option</option>
-                                @foreach ($projects as $project)
-                                    <option value="{{ $project->id }}"
-                                        @if ($project->id == $project_id) selected @endif>
-                                        {{ $project->name }}</option>
-                                @endforeach
-                            </select>
-                        </div> --}}
                         <div class="form-group col-md-4">
                             <label for="">From Date</label>
                             <input type="text" class="form-control datetimepicker-input datepicker1" name="from_date"
@@ -119,6 +104,10 @@
     <div class="card card-primary card-outline">
         <div class="card-header">
             <h3 class="card-title">Team Leads Report</h3>
+            <div class="card-tools">
+                <a href="{{ route('export.team-leads') }}?search_id={{ $search_id }}&campaign_id={{ $campaign_id }}&from_date={{ $from_date }}&to_date={{ $to_date }}"
+                    class="btn btn-success btn-sm ml-2" onclick="return confirm('Are you sure?')">Export Report</a>
+            </div>
         </div>
 
         <div class="card-body">
@@ -136,6 +125,12 @@
                         <th class="text-center">Fatal</th>
                         <th class="text-center">Good</th>
                         <th class="text-center">QA Percentage</th>
+                        <th class="text-center">Overall QA Percentage</th>
+                        @if (
+                            // (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) && Auth::user()->campaign_id == 1) ||
+                            in_array(Auth::user()->roles[0]->name, ['Super Admin']))
+                            <th class="action">Action</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -152,17 +147,22 @@
                                 $other = [];
                                 $total = [];
                                 
+                                
                                 $aboveAverageCount = 0;
                                 $averageCount = 0;
                                 $badCount = 0;
                                 $goodCount = 0;
                                 $fatalCount = 0;
                                 $otherCount = 0;
-                                
+                               
+                            
                                 if (count($item->teamLeadVoiceAudits) > 0) {
                                     foreach ($item->teamLeadVoiceAudits as $audit) {
                                         $project_ids = [];
                                         $projects = $audit->campaign->projects;
+                                        $sum = 0;
+                                        $percentage = 0;
+                                        $total_tl = [];
                                         foreach ($projects as $project) {
                                             array_push($project_ids, $project->id);
                                             foreach ($project_ids as $project_id) {
@@ -188,6 +188,9 @@
                                                 }
                                             }
                                             $total[$audit->team_lead_id][$project->id]['total_count'] = $aboveAverageCount + $averageCount + $badCount + $fatalCount + $goodCount + $otherCount;
+                                            $percentage = (($total[$audit->team_lead_id][$project->id]['total_count'])/count($projects) * 100);
+                                            $sum = $percentage + $sum;
+                                            $total_tl[$audit->team_lead_id] = $sum;
                                         }
                                     }
                                 }
@@ -242,11 +245,29 @@
                                     @if ($item->campaign->projects)
                                         @foreach ($item->campaign->projects as $project)
                                             <div>
-                                                {{ round(($total[$item->id][$project->id]['total_count'] / count($item->teamLeadVoiceAudits)) * 100) }} %
+                                                {{ round(($total[$item->id][$project->id]['total_count'] / count($item->teamLeadVoiceAudits)) * 100) }}
+                                                %
                                             </div>
                                         @endforeach
                                     @endif
                                 </td>
+                                <td class="text-center">  
+                                    @if ($item->campaign->projects)
+                                            <div>
+                                                {{ round(($total_tl[$item->id] / count($item->teamLeadVoiceAudits))) }}
+                                                %
+                                            </div>
+                                        
+                                    @endif
+                                </td>
+                                @if (
+                                    // (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) && Auth::user()->campaign_id == 1) ||
+                                    in_array(Auth::user()->roles[0]->name, ['Super Admin']))
+                                    <td class="action">
+                                        <a href="{{ route('voice-audits.index', 1) }}?search=1&record_id=&user_id=&associate_id=-1&campaign_id={{ $item->campaign_id }}&outcome=&from_date={{ $from_date }}&to_date={{ $to_date }}&from_time={{ $from_time }}&to_time={{ $to_time }}&review="
+                                            class="btn btn-success btn-sm" target="_blank"><i class="fas fa-eye"></i></a>
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                     @else

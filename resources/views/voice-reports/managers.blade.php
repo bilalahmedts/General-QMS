@@ -25,7 +25,6 @@
             @php
                 $search_id = '';
                 $campaign_id = '';
-                // $project_id = '';
                 $from_date = '';
                 $to_date = '';
                 $from_time = '';
@@ -39,9 +38,7 @@
                     if (!empty($_GET['campaign_id'])) {
                         $campaign_id = $_GET['campaign_id'];
                     }
-                    // if (!empty($_GET['project_id'])) {
-                    //     $project_id = $_GET['project_id'];
-                    // }
+                    
                     if (!empty($_GET['from_date'])) {
                         $from_date = $_GET['from_date'];
                     }
@@ -82,17 +79,7 @@
                             </div>
                         @endif
 
-                        {{-- <div class="form-group col-md-4">
-                            <label for="">Select Project</label>
-                            <select name="project_id" class="form-control select2">
-                                <option value="">Select Option</option>
-                                @foreach ($projects as $project)
-                                    <option value="{{ $project->id }}"
-                                        @if ($project->id == $project_id) selected @endif>
-                                        {{ $project->name }}</option>
-                                @endforeach
-                            </select>
-                        </div> --}}
+                        
                         <div class="form-group col-md-4">
                             <label for="">From Date</label>
                             <input type="text" class="form-control datetimepicker-input datepicker1" name="from_date"
@@ -119,6 +106,10 @@
     <div class="card card-primary card-outline">
         <div class="card-header">
             <h3 class="card-title">Managers Report</h3>
+            <div class="card-tools">
+                <a href="{{ route('export.managers') }}?search_id={{ $search_id }}&campaign_id={{ $campaign_id }}&from_date={{ $from_date }}&to_date={{ $to_date }}"
+                class="btn btn-success btn-sm ml-2" onclick="return confirm('Are you sure?')">Export Report</a>
+            </div>
         </div>
 
         <div class="card-body">
@@ -136,6 +127,7 @@
                         <th class="text-center">Fatal</th>
                         <th class="text-center">Good</th>
                         <th class="text-center">QA Percentage</th>
+                        <th class="text-center">Overall QA Percentage</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -162,6 +154,9 @@
                                     foreach ($item->managerVoiceAudits as $audit) {
                                         $project_ids = [];
                                         $projects = $audit->campaign->projects;
+                                        $sum = 0;
+                                        $percentage = 0;
+                                        $total_manager = [];
                                         foreach ($projects as $project) {
                                             array_push($project_ids, $project->id);
                                             foreach ($project_ids as $project_id) {
@@ -187,6 +182,9 @@
                                                 }
                                             }
                                             $total[$audit->manager_id][$project->id]['total_count'] = $aboveAverageCount + $averageCount + $badCount + $fatalCount + $goodCount + $otherCount;
+                                            $percentage = (($total[$audit->manager_id][$project->id]['total_count'])/count($projects) * 100);
+                                            $sum = $percentage + $sum;
+                                            $total_manager[$audit->manager_id] = $sum;
                                         }
                                     }
                                 }
@@ -244,6 +242,15 @@
                                                 {{ round(($total[$item->id][$project->id]['total_count'] / count($item->managerVoiceAudits)) * 100) }} %
                                             </div>
                                         @endforeach
+                                    @endif
+                                </td>
+                                <td class="text-center">  
+                                    @if ($item->campaign->projects)
+                                            <div>
+                                                {{ round(($total_manager[$item->id] / count($item->managerVoiceAudits))) }}
+                                                %
+                                            </div>
+                                        
                                     @endif
                                 </td>
                             </tr>
