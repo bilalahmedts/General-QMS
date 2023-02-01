@@ -247,7 +247,7 @@
                                 <td class="text-center">  
                                     @if ($item->campaign->projects)
                                             <div>
-                                                {{ round(($total_manager[$item->id] / count($item->managerVoiceAudits))) }}
+                                                {{ round(($total_manager[$item->id] / count($item->campaign->projects))) }}
                                                 %
                                             </div>
                                         

@@ -119,6 +119,9 @@
                         <th>Team Lead Name</th>
                         <th>Campaign</th>
                         <th>Project</th>
+                        @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']))
+                        <th>Count</th>
+                        @endif
                         <th class="text-center">Above Average</th>
                         <th class="text-center">Average</th>
                         <th class="text-center">Bad</th>
@@ -154,10 +157,11 @@
                                 $goodCount = 0;
                                 $fatalCount = 0;
                                 $otherCount = 0;
-                               
+                               $count = 0;
                             
                                 if (count($item->teamLeadVoiceAudits) > 0) {
                                     foreach ($item->teamLeadVoiceAudits as $audit) {
+                                        // $count = count($item->teamLeadVoiceAudits);
                                         $project_ids = [];
                                         $projects = $audit->campaign->projects;
                                         $sum = 0;
@@ -166,6 +170,7 @@
                                         foreach ($projects as $project) {
                                             array_push($project_ids, $project->id);
                                             foreach ($project_ids as $project_id) {
+                                                
                                                 // echo $project_id.' - '.$project->id."<br>";
                                                 if ($project_id == $project->id && $audit->rating == 'above average') {
                                                     $aboveAverage[$audit->team_lead_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getTlvCount($audit->team_lead_id, 'above average', $project->id);
@@ -188,7 +193,7 @@
                                                 }
                                             }
                                             $total[$audit->team_lead_id][$project->id]['total_count'] = $aboveAverageCount + $averageCount + $badCount + $fatalCount + $goodCount + $otherCount;
-                                            $percentage = (($total[$audit->team_lead_id][$project->id]['total_count'])/count($projects) * 100);
+                                            $percentage = (($total[$audit->team_lead_id][$project->id]['total_count'])/count($item->teamLeadVoiceAudits) * 100);
                                             $sum = $percentage + $sum;
                                             $total_tl[$audit->team_lead_id] = $sum;
                                         }
@@ -206,6 +211,12 @@
                                         @endforeach
                                     @endif
                                 </td>
+                                @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']))
+                                {{-- <td class="text-center">{{ count($item->teamLeadVoiceAudits) }}</td> --}}
+                                <td class="text-center">{{ count($item->teamLeadVoiceAudits) }}</td>
+
+                                @endif
+                                
                                 <td class="text-center">
                                     @if ($item->campaign->projects)
                                         @foreach ($item->campaign->projects as $project)
@@ -253,8 +264,9 @@
                                 </td>
                                 <td class="text-center">  
                                     @if ($item->campaign->projects)
+                                    {{-- Count: {{ count($item->teamLeadVoiceAudits) }} --}}
                                             <div>
-                                                {{ round(($total_tl[$item->id] / count($item->teamLeadVoiceAudits))) }}
+                                                {{ round(($total_tl[$item->id] / count($item->campaign->projects))) }}
                                                 %
                                             </div>
                                         
