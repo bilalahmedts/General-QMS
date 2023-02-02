@@ -188,7 +188,7 @@
                             <i class="fas fa-plus"></i> Start Audit
                         </a>
                     @endif
-                    <a href="{{ route('export.voice-audits') }}?user_id={{ $user_id }}&associate_id={{ $associate_id }}&campaign_id={{ $campaign_id }}&outcome={{ $outcome }}&review={{ $review }}&from_date={{ $from_date }}&to_date={{ $to_date }}&from_time={{ $from_time }}&to_time={{ $to_time }}"
+                    <a href="{{ route('export.voice-audits') }}?user_id={{ $user_id }}&associate_id={{ $associate_id }}&campaign_id={{ $campaign_id }}&project_id={{ $project_id }}&outcome={{ $outcome }}&review={{ $review }}&from_date={{ $from_date }}&to_date={{ $to_date }}&from_time={{ $from_time }}&to_time={{ $to_time }}"
                         class="btn btn-success btn-sm ml-2" onclick="return confirm('Are you sure?')">Export Report</a>
                 </div>
             @endif

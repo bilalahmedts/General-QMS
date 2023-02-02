@@ -150,7 +150,7 @@
                         <p>Team Leads Report</p>
                     </a>
                 </li>
-                @if ((in_array(Auth::user()->roles[0]->name, ['Super Admin', 'Director'])) || (in_array(Auth::user()->roles[0]->name, ['Director','Manager']) && ($campaign_id == 1)))
+                @if ((in_array(Auth::user()->roles[0]->name, ['Super Admin', 'Director'])) || (in_array(Auth::user()->roles[0]->name, ['Director','Manager']) && ( Auth::user()->campaign_id == 1)))
                 <li class="nav-item">
                     <a href="{{ route('voice-reports.managers') }}?search=1&search_id=&from_date={{ now()->startOfMonth()->format('d/m/Y') }}&to_date={{ now()->endOfMonth()->format('d/m/Y') }}"
                         class="nav-link {{ request()->is('voice-reports/managers', 'voice-reports/managers/*') ? 'active' : '' }}">
