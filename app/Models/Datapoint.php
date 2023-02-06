@@ -36,14 +36,7 @@ class Datapoint extends Model
         'updated_at'
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        Datapoint::creating(function($model) {
-            $model->added_by = Auth::user()->id ?? 1;
-        });
-    }
+    
 
     /**
      * Get all of the comments for the Datapoint

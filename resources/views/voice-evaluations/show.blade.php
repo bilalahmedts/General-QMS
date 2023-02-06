@@ -63,7 +63,7 @@
                                             <td width="25%">{{ $item->name }}
                                             </td>
                                             <td>{{ $item->question }}</td>
-                                            <td>{{ $item->campaign->name ?? '' }}</td>
+                                            <td>{{ $item->score ?? '' }}</td>
                                             <td class="action">
                                                 <a href="{{ route('datapoints.edit', $item) }}"
                                                     class="btn btn-primary btn-xs"><i class="fas fa-edit"></i></a>

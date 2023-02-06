@@ -27,16 +27,20 @@ class VoiceReportController extends Controller
         });
 
         $query = $query->whereHas('voiceAudits', function ($query) use ($request) {
-            $query = $query->when($request, function ($query, $request) {
-                $query->search($request);
-            }
+            $query = $query->when(
+                $request,
+                function ($query, $request) {
+                    $query->search($request);
+                }
             );
         });
 
         $query = $query->with('voiceAudits', function ($query) use ($request) {
-            $query = $query->when($request, function ($query, $request) {
-                $query->search($request);
-            }
+            $query = $query->when(
+                $request,
+                function ($query, $request) {
+                    $query->search($request);
+                }
             );
         });
 
@@ -61,16 +65,20 @@ class VoiceReportController extends Controller
         });
 
         $query = $query->whereHas('voiceAudits', function ($query) use ($request) {
-            $query = $query->when($request, function ($query, $request) {
-                $query->search($request);
-            }
+            $query = $query->when(
+                $request,
+                function ($query, $request) {
+                    $query->search($request);
+                }
             );
         });
 
         $query = $query->with('voiceAudits', function ($query) use ($request) {
-            $query = $query->when($request, function ($query, $request) {
-                $query->search($request);
-            }
+            $query = $query->when(
+                $request,
+                function ($query, $request) {
+                    $query->search($request);
+                }
             );
         });
 
@@ -94,16 +102,20 @@ class VoiceReportController extends Controller
         });
 
         $query = $query->whereHas('voiceAudits', function ($query) use ($request) {
-            $query = $query->when($request, function ($query, $request) {
-                $query->search($request);
-            }
+            $query = $query->when(
+                $request,
+                function ($query, $request) {
+                    $query->search($request);
+                }
             );
         });
 
         $query = $query->with('voiceAudits', function ($query) use ($request) {
-            $query = $query->when($request, function ($query, $request) {
-                $query->search($request);
-            }
+            $query = $query->when(
+                $request,
+                function ($query, $request) {
+                    $query->search($request);
+                }
             );
         });
 
@@ -128,15 +140,19 @@ class VoiceReportController extends Controller
         });
 
         $query = $query->whereHas('teamLeadVoiceAudits', function ($query) use ($request) {
-            $query = $query->when($request, function ($query, $request) {
-                $query->search($request);
-            }
+            $query = $query->when(
+                $request,
+                function ($query, $request) {
+                    $query->search($request);
+                }
             );
         });
         $query = $query->with('teamLeadVoiceAudits', function ($query) use ($request) {
-            $query = $query->when($request, function ($query, $request) {
-                $query->search($request);
-            }
+            $query = $query->when(
+                $request,
+                function ($query, $request) {
+                    $query->search($request);
+                }
             );
         });
 
@@ -147,11 +163,12 @@ class VoiceReportController extends Controller
         $users = User::role('Team Lead')->orderBy('name', 'asc')->get();
         $campaigns = Campaign::where('status', 'active')->orderBy('name', 'asc')->get();
         $projects = Project::orderBy('name', 'asc')->get();
-        return view('voice-reports.team-leads')->with(compact('users', 'user_evaluations','campaigns','projects'));
+        return view('voice-reports.team-leads')->with(compact('users', 'user_evaluations', 'campaigns', 'projects'));
     }
-    public static function getTlvCount($team_lead_id, $rating, $project_id){
-         $count = VoiceAudit::where('team_lead_id', $team_lead_id)->where('rating', $rating)->where('project_id', $project_id)->count();
-         return $count;
+    public static function getTlvCount($team_lead_id, $rating, $project_id)
+    {
+        $count = VoiceAudit::where('team_lead_id', $team_lead_id)->where('rating', $rating)->where('project_id', $project_id)->count();
+        return $count;
     }
     public function managers(Request $request)
     {
@@ -166,15 +183,19 @@ class VoiceReportController extends Controller
         });
 
         $query = $query->whereHas('managerVoiceAudits', function ($query) use ($request) {
-            $query = $query->when($request, function ($query, $request) {
-                $query->search($request);
-            }
+            $query = $query->when(
+                $request,
+                function ($query, $request) {
+                    $query->search($request);
+                }
             );
         });
         $query = $query->with('managerVoiceAudits', function ($query) use ($request) {
-            $query = $query->when($request, function ($query, $request) {
-                $query->search($request);
-            }
+            $query = $query->when(
+                $request,
+                function ($query, $request) {
+                    $query->search($request);
+                }
             );
         });
 
@@ -185,11 +206,12 @@ class VoiceReportController extends Controller
         $users = User::role('Manager')->orderBy('name', 'asc')->get();
         $campaigns = Campaign::where('status', 'active')->orderBy('name', 'asc')->get();
         $projects = Project::orderBy('name', 'asc')->get();
-        return view('voice-reports.managers')->with(compact('users', 'user_evaluations','campaigns','projects'));
+        return view('voice-reports.managers')->with(compact('users', 'user_evaluations', 'campaigns', 'projects'));
     }
-    public static function getManagervCount($manager_id, $rating, $project_id){
-         $count = VoiceAudit::where('manager_id', $manager_id)->where('rating', $rating)->where('project_id', $project_id)->count();
-         return $count;
+    public static function getManagervCount($manager_id, $rating, $project_id)
+    {
+        $count = VoiceAudit::where('manager_id', $manager_id)->where('rating', $rating)->where('project_id', $project_id)->count();
+        return $count;
     }
     public function associates(Request $request)
     {
@@ -204,16 +226,20 @@ class VoiceReportController extends Controller
         });
 
         $query = $query->whereHas('associateVoiceAudits', function ($query) use ($request) {
-            $query = $query->when($request, function ($query, $request) {
-                $query->search($request);
-            }
+            $query = $query->when(
+                $request,
+                function ($query, $request) {
+                    $query->search($request);
+                }
             );
         });
 
         $query = $query->with('associateVoiceAudits', function ($query) use ($request) {
-            $query = $query->when($request, function ($query, $request) {
-                $query->search($request);
-            }
+            $query = $query->when(
+                $request,
+                function ($query, $request) {
+                    $query->search($request);
+                }
             );
         });
 

@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Voice;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Project;
 use App\Models\Campaign;
+use App\Traits\UserTrait;
 use App\Models\VoiceAudit;
 use Illuminate\Http\Request;
 use App\Models\VoiceEvaluation;
@@ -12,9 +14,8 @@ use App\Models\DatapointCategory;
 use App\Services\VoiceAuditService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use App\Http\Requests\VoiceAuditRequest;
-use App\Models\Project;
-use App\Traits\UserTrait;
 
 class VoiceAuditController extends Controller
 {
@@ -61,7 +62,6 @@ class VoiceAuditController extends Controller
                 $query = $query->where('outcome', 'rejected');
             }
         }
-
         $voice_audits = $query
             ->sortable()
             ->orderBy('id', 'desc')
@@ -72,18 +72,17 @@ class VoiceAuditController extends Controller
             ->orderBy('name', 'asc')
             ->get();
         $projects = Project::orderBy('name', 'asc')->get();
-        return view('voice-audits.index')->with(compact('voice_evaluation', 'voice_audits', 'users', 'campaigns', 'projects'));
+        $associates = User::role('Associate')->where('campaign_id', '!=', 1)->orderBy('name', 'asc')->get();
+        Session::put('data_url', request()->fullUrl());
+        session::get('data_url');
+        return view('voice-audits.index')->with(compact('voice_evaluation', 'voice_audits', 'users', 'campaigns', 'projects', 'associates'));
     }
 
     public function create(Request $request, VoiceEvaluation $voice_evaluation)
     {
         $campaign = Campaign::findOrFail($request->campaign_id);
         $project = Project::findOrFail($request->project_id);
-        $users = User::where('campaign_id', $request->campaign_id)
-            ->where('project_id', $request->project_id)
-            ->where('status', 'active')
-            ->orderBy('name', 'asc')
-            ->get();
+        $user = User::findOrFail($request->associate_id);
         $categories = DatapointCategory::where('voice_evaluation_id', $voice_evaluation->id)
             ->where('campaign_id', $request->campaign_id)
             ->where('project_id', $request->project_id)
@@ -91,7 +90,8 @@ class VoiceAuditController extends Controller
             ->with('datapoints')
             ->orderBy('sort', 'desc')
             ->get();
-        return view('voice-audits.create')->with(compact('voice_evaluation', 'categories', 'campaign', 'project', 'users'));
+
+        return view('voice-audits.create')->with(compact('voice_evaluation', 'categories', 'campaign', 'project', 'user'));
     }
 
     /**
@@ -104,21 +104,18 @@ class VoiceAuditController extends Controller
     {
         // set data
         $call_date = Carbon::createFromFormat('d-m-Y', $request->call_date);
-
-        /*         // get associate
-         $associate = User::find($request->associate_id); */
-
         $request->merge([
             'call_date' => $call_date,
         ]);
         $voice_audit = VoiceAudit::create($request->all());
         $this->voiceAuditService->insertAuditPoints($request, $voice_audit);
-        // return redirect()
-        //     ->route('voice-audits.index', $voice_audit->voice_evaluation_id)
-        //     ->with('success', 'Voice Audit created successfully!');
+        Session::flash('success', 'Audit Added successfully!');
         return redirect()
-            ->back()
-            ->with('success', 'Voice Audit created successfully!');
+            ->route('voice-audits.index', $voice_audit->voice_evaluation_id);
+            
+        // return redirect()
+        //     ->back()
+        //     ->with('success', 'Voice Audit created successfully!');
     }
 
     public function show(VoiceAudit $voice_audit)

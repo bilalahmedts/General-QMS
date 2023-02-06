@@ -21,6 +21,15 @@
                     </p>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('voice-audits.index', 2) }}"
+                    class="nav-link {{ request()->is('voice-audits/2', 'voice-audits/2/*') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-globe"></i>
+                    <p>
+                        PCI Audit
+                    </p>
+                </a>
+            </li>
 
             <li class="nav-item">
                 <a href="{{ route('voice-audit-appeals.index') }}"

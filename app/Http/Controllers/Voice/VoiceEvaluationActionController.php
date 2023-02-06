@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Voice;
 
+use App\Models\Project;
+use App\Models\Campaign;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\VoiceEvaluationAction;

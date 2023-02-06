@@ -30,14 +30,7 @@ class Campaign extends Model
         'updated_at'
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        Campaign::creating(function($model) {
-            $model->added_by = Auth::user()->id ?? '1';
-        });
-    }
+    
 
     public function scopeSearch($query, $request){
         if ($request->has('campaign_id')) {

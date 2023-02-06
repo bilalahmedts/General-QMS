@@ -33,14 +33,7 @@ class DatapointCategory extends Model
         'updated_at'
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        DatapointCategory::creating(function($model) {
-            $model->added_by = Auth::user()->id ?? 1;
-        });
-    }
+    
 
     public function datapoints()
     {

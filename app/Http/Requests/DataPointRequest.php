@@ -26,7 +26,6 @@ class DataPointRequest extends FormRequest
         $rules = [
             'voice_evaluation_id' => 'required|numeric',
             'name' => 'required',
-            'question' => 'required',
             'sort' => 'required|numeric'
         ];
 

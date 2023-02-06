@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Models\Campaign;
 use App\Models\User;
 use App\Models\Project;
 use Illuminate\Support\Facades\DB;
@@ -50,5 +51,10 @@ trait UserTrait
             ->where('campaign_id', $campaign_id)
             ->get();
         return response()->json($projects, 200);
+    }
+    public function getCampaign($campaign_id)
+    {
+        $campaign = User::findOrFail($campaign_id);
+        return response()->json($campaign, 200);
     }
 }

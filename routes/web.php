@@ -192,6 +192,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('get-project-detail/{campaign_id}', [UserController::class, 'getProjects'])->name('project-detail');
 
+    Route::get('get-campaign-detail/{user_id}', [UserController::class, 'getCampaign'])->name('campaign-detail');
+
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::get('logout', [LoginController::class, 'logout'])->name('logout');

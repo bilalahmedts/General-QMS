@@ -51,7 +51,7 @@
 
                 <div class="form-group">
                     <label for="exampleInputEmail1">Question <span>*</span></label>
-                    <input type="text" class="form-control" name="question" placeholder="Enter Question" required>
+                    <input type="text" class="form-control" name="question" placeholder="Enter Question" >
                 </div>
                 @error('question')
                     <div class="validate-error">{{ $message }}</div>

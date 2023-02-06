@@ -48,7 +48,30 @@
             </div>
             <div class="card-body">
                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                <input type="hidden" name="associate_id" value="{{ $user->id ?? 0 }}">
                 <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="">HRMS ID <span>*</span></label>
+                            <input type="text" class="form-control" value="{{ $user->hrms_id ?? 0 }}" disabled>
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="">Agent Name <span>*</span></label>
+                            <input type="text" class="form-control" value="{{ $user->name ?? '' }}" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="">Reporting To <span>*</span></label>
+                            <input type="hidden" class="form-control" name="team_lead_id"
+                                value="{{ $user->reporting_to ?? 0 }}">
+                            <input type="text" class="form-control" value="{{ $user->supervisor->name ?? '' }}"
+                                disabled>
+                        </div>
+                    </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="">Campaign <span>*</span></label>
@@ -61,37 +84,10 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="">Project <span>*</span></label>
-                            <input type="hidden" class="form-control" name="project_id" id="project_id"
+                            <input type="hidden" class="form-control" name="project_id" 
                                 value="{{ $project->id }}">
                             <input type="text" class="form-control" name="campaign_name" value="{{ $project->name }}"
                                 disabled>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="">Agent Name <span>*</span></label>
-                            <select name="associate_id" id="agent" class="form-control select2" required>
-                                <option value="">Select Option</option>
-                                @foreach ($users as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        @error('associate_id')
-                            <div class="validate-error">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="">HRMS ID <span>*</span></label>
-                            <input type="text" class="form-control" name="hrms_id" id="hrms_id" disabled>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="">Reporting To <span>*</span></label>
-                            <input type="hidden" class="form-control" name="team_lead_id" id="reporting_id">
-                            <input type="text" class="form-control" id="reporting_to" disabled>
                         </div>
                     </div>
                     <input type="hidden" name="manager_id" id="manager_id">

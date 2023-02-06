@@ -5,7 +5,6 @@
 
 @section('content')
 
-
     <div class="search-area">
         <div class="row">
 
@@ -177,7 +176,7 @@
     <div class="card card-primary card-outline">
         <div class="card-header">
             <h3 class="card-title">{{ $voice_evaluation->name ?? 'Voice Audits' }} List</h3>
-            
+
             @if ($voice_evaluation)
                 <div class="card-tools">
                     @if (
@@ -328,25 +327,25 @@
                     <div class="modal-body">
 
                         <div class="form-group">
-                            <label for="">Select Campaign <span>*</span></label>
-                            <select name="campaign_id" id="campaign" class="form-control select2" required>
+                            <label for="">Select Associate <span>*</span></label>
+                            <select name="associate_id" id="associate" class="form-control select2" required>
                                 <option value="">Select Option</option>
-                                @foreach ($campaigns as $campaign)
-                                    <option value="{{ $campaign->id }}">{{ $campaign->name }}</option>
+                                @foreach ($associates as $associate)
+                                    <option value="{{ $associate->id }}">{{ $associate->hrms_id ?? 0 }} -
+                                        {{ $associate->name }} - {{ $associate->campaign->name ?? '' }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        @error('campaign_id')
-                            <div class="validate-error">{{ $message }}</div>
-                        @enderror
+                        <input type="hidden" name="campaign_id" id="campaign">
                         <div class="form-group">
                             <label for="">Select Project</label>
                             <select name="project_id" id="projects" class="form-control select2">
+                                <option value="">Select Option</option>
+                                @foreach ($projects as $project)
+                                    <option value="{{ $project->id }}">{{ $project->name }}</option>
+                                @endforeach
                             </select>
                         </div>
-                        @error('project_id')
-                            <div class="validate-error">{{ $message }}</div>
-                        @enderror
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="submit" class="btn btn-primary">Submit</button>
@@ -358,6 +357,7 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
+
     <!-- /.modal -->
 
 @endsection
@@ -398,23 +398,25 @@
             });
 
         });
-        $('#campaign').change(function() {
-            var campaign_id = $(this).val();
+        $('#associate').change(function() {
+            var user_id = $(this).val();
             $.ajax({
                 type: 'GET',
-                url: `{{ route('main') }}/get-project-detail/${campaign_id}`,
+                url: `{{ route('main') }}/get-campaign-detail/${user_id}`,
                 dataType: 'json',
-                success: function(data) {
-                    console.log(data);
-                    let select_option = '<option value="">Select Option</option>';
-                    data.forEach(element => {
-                        select_option += "<option value=" + element.id + ">" +
-                            element.name + "</option>";
-                    });
-                    document.getElementById("projects").innerHTML = select_option;
+                success: function(response) {
+                    console.log(response);
+                    campaign_id = $("#campaign").val(response.campaign_id)
                 }
             });
         });
     </script>
+    @if (session()->has('success'))
+        <script>
+            $(document).ready(function() {
+                $("#modal-audit").modal('show');
+            });
+        </script>
+    @endif
 
 @endsection
