@@ -25,7 +25,6 @@ class UserRequest extends FormRequest
     {
         $rules = [
             'role' => 'required',
-            'campaign_id' => 'required'
         ];
 
         return $rules;

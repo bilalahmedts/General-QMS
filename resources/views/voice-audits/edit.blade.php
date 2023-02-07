@@ -149,7 +149,7 @@ if (val.checked == true) {
             format: 'DD-MM-YYYY',
             keepInvalid: false
         });
-        $('#agent').on('change', function() {
+        /* $('#agent').on('change', function() {
             var user_id = this.value;
 
             if (user_id != "") {
@@ -163,8 +163,23 @@ if (val.checked == true) {
                     }
                 });
             }
-        });
+        }); */
+        $('#associate').on('change', function() {
+                var user_id = this.value;
 
+                if (user_id != "") {
+                    $.ajax({
+                        url: `{{ route('main') }}/get-user-detail/${user_id}`,
+                        type: 'GET',
+                        dataType: 'json', // added data type
+                        success: function(res) {
+                            $("#hrms_id").val(res.hrms_id);
+                            $("#reporting_id").val(res.reporting_id);
+                            $("#reporting").val(res.reporting_to);
+                        }
+                    });
+                }
+            });
         /* $(".qrating input").click(function percentage() {
             let percentage = 0;
             let total = {{ $points }};
@@ -265,22 +280,7 @@ if (val.checked == true) {
                 keepInvalid: false
             });
 
-            $('#agent').on('change', function() {
-                var user_id = this.value;
-
-                if (user_id != "") {
-                    $.ajax({
-                        url: `{{ route('main') }}/get-user-detail/${user_id}`,
-                        type: 'GET',
-                        dataType: 'json', // added data type
-                        success: function(res) {
-                            $("#reporting_id").val(res.reporting_id);
-                            $("#reporting").val(res.reporting_to);
-                            $("#campaign").val(res.campaign);
-                        }
-                    });
-                }
-            });
+            
 
             $(document).ready(function() {
                 $('.qrating').change(function() {

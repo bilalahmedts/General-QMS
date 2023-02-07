@@ -109,13 +109,13 @@ class VoiceAuditController extends Controller
         ]);
         $voice_audit = VoiceAudit::create($request->all());
         $this->voiceAuditService->insertAuditPoints($request, $voice_audit);
-        Session::flash('success', 'Audit Added successfully!');
-        return redirect()
-            ->route('voice-audits.index', $voice_audit->voice_evaluation_id);
-            
+        // Session::flash('success', 'Audit Added successfully!');
         // return redirect()
-        //     ->back()
-        //     ->with('success', 'Voice Audit created successfully!');
+        //     ->route('voice-audits.index', $voice_audit->voice_evaluation_id);
+            
+        return redirect()
+            ->back()
+            ->with('success', 'Voice Audit created successfully!');
     }
 
     public function show(VoiceAudit $voice_audit)
@@ -133,7 +133,7 @@ class VoiceAuditController extends Controller
     {
         $this->voiceAuditService->auditEditAccess($voice_audit);
 
-        $users = User::role(['Manager', 'Team Lead', 'Associate'])
+        $users = User::role(['Associate'])
             ->orderBy('name', 'ASC')
             ->get();
 
