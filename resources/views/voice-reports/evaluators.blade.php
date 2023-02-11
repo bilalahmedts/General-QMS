@@ -74,6 +74,21 @@
                             <input type="text" class="form-control datetimepicker-input datepicker2" name="to_date"
                                 value="{{ $to_date }}" data-toggle="datetimepicker" data-target=".datepicker2" />
                         </div>
+                        <div class="form-group col-md-4">
+                            
+                            <input type="hidden">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="">From Time</label>
+                            <input type="text" class="form-control datetimepicker-input datepicker3" name="from_time"
+                                value="{{ $from_time }}" data-toggle="datetimepicker" data-target=".datepicker3" />
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="">To Time</label>
+                            <input type="text" class="form-control datetimepicker-input datepicker4" name="to_time"
+                                value="{{ $to_time }}" data-toggle="datetimepicker" data-target=".datepicker4" />
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer">

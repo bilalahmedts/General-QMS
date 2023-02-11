@@ -44,6 +44,12 @@
                     if (!empty($_GET['to_date'])) {
                         $to_date = $_GET['to_date'];
                     }
+                    if (!empty($_GET['from_time'])) {
+                        $from_time = $_GET['from_time'];
+                    }
+                    if (!empty($_GET['to_time'])) {
+                        $to_time = $_GET['to_time'];
+                    }
                 }
                 
             @endphp
@@ -89,6 +95,7 @@
                             <input type="text" class="form-control datetimepicker-input datepicker2" name="to_date"
                                 value="{{ $to_date }}" data-toggle="datetimepicker" data-target=".datepicker2" />
                         </div>
+                        
                     </div>
                 </div>
                 <div class="card-footer">
@@ -119,9 +126,9 @@
                         <th>Team Lead Name</th>
                         <th>Campaign</th>
                         <th>Project</th>
-                        @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']))
-                        <th>Count</th>
-                        @endif
+                        {{-- @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']))
+                            <th>Count</th>
+                        @endif --}}
                         <th class="text-center">Above Average</th>
                         <th class="text-center">Average</th>
                         <th class="text-center">Bad</th>
@@ -150,15 +157,14 @@
                                 $other = [];
                                 $total = [];
                                 
-                                
                                 $aboveAverageCount = 0;
                                 $averageCount = 0;
                                 $badCount = 0;
                                 $goodCount = 0;
                                 $fatalCount = 0;
                                 $otherCount = 0;
-                               $count = 0;
-                            
+                                $count = 0;
+                                
                                 if (count($item->teamLeadVoiceAudits) > 0) {
                                     foreach ($item->teamLeadVoiceAudits as $audit) {
                                         // $count = count($item->teamLeadVoiceAudits);
@@ -170,7 +176,6 @@
                                         foreach ($projects as $project) {
                                             array_push($project_ids, $project->id);
                                             foreach ($project_ids as $project_id) {
-                                                
                                                 // echo $project_id.' - '.$project->id."<br>";
                                                 if ($project_id == $project->id && $audit->rating == 'above average') {
                                                     $aboveAverage[$audit->team_lead_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getTlvCount($audit->team_lead_id, 'above average', $project->id);
@@ -193,7 +198,7 @@
                                                 }
                                             }
                                             $total[$audit->team_lead_id][$project->id]['total_count'] = $aboveAverageCount + $averageCount + $badCount + $fatalCount + $goodCount + $otherCount;
-                                            $percentage = (($total[$audit->team_lead_id][$project->id]['total_count'])/count($item->teamLeadVoiceAudits) * 100);
+                                            $percentage = $total[$audit->team_lead_id][$project->id]['total_count'] / count($user_evaluations);
                                             $sum = $percentage + $sum;
                                             $total_tl[$audit->team_lead_id] = $sum;
                                         }
@@ -211,12 +216,8 @@
                                         @endforeach
                                     @endif
                                 </td>
-                                @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']))
-                                {{-- <td class="text-center">{{ count($item->teamLeadVoiceAudits) }}</td> --}}
-                                <td class="text-center">{{ count($item->teamLeadVoiceAudits) }}</td>
+                               
 
-                                @endif
-                                
                                 <td class="text-center">
                                     @if ($item->campaign->projects)
                                         @foreach ($item->campaign->projects as $project)
@@ -256,20 +257,18 @@
                                     @if ($item->campaign->projects)
                                         @foreach ($item->campaign->projects as $project)
                                             <div>
-                                                {{ round(($total[$item->id][$project->id]['total_count'] / count($item->teamLeadVoiceAudits)) * 100) }}
+                                                {{ round($total[$item->id][$project->id]['total_count'] / count($user_evaluations)) }}
                                                 %
                                             </div>
                                         @endforeach
                                     @endif
                                 </td>
-                                <td class="text-center">  
+                                <td class="text-center">
                                     @if ($item->campaign->projects)
-                                    {{-- Count: {{ count($item->teamLeadVoiceAudits) }} --}}
-                                            <div>
-                                                {{ round(($total_tl[$item->id] / count($item->campaign->projects))) }}
-                                                %
-                                            </div>
-                                        
+                                        <div>
+                                            {{ round($total_tl[$item->id] / count($project_ids)) }}
+                                            %
+                                        </div>
                                     @endif
                                 </td>
                                 @if (

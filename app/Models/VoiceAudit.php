@@ -107,6 +107,37 @@ class VoiceAudit extends Model
         }
         if ($request->has('from_date')) {
             if (!empty($request->from_date) && !empty($request->to_date)) {
+                // date
+                $from_date = Carbon::createFromFormat('d/m/Y', $request->from_date);
+                $to_date = Carbon::createFromFormat('d/m/Y', $request->to_date);
+
+                // from time
+                if (!empty($request->from_time)) {
+                    $from_time = Carbon::createFromFormat('g:i:s A', $request->from_time);
+                    $from_date->hour = $from_time->format('H');
+                    $from_date->minute = $from_time->format('i');
+                } else {
+                    $from_date->startOfDay();
+                }
+
+                // to time
+                if (!empty($request->to_time)) {
+                    $to_time = Carbon::createFromFormat('g:i:s A', $request->to_time);
+                    $to_date->hour = $to_time->format('H');
+                    $to_date->minute = $to_time->format('i');
+                } else {
+                    $to_date->startOfDay();
+                }
+
+                $query = $query->where('created_at', '>=', $from_date->toDateTimeString());
+                $query = $query->where('created_at', '<=', $to_date->toDateTimeString());
+            } elseif (!empty($request->from_date)) {
+                $from_date = Carbon::createFromFormat('d/m/Y', $request->from_date);
+                $query = $query->where('created_at', $from_date->toDateTimeString());
+            }
+        }
+        /* if ($request->has('from_date')) {
+            if (!empty($request->from_date) && !empty($request->to_date)) {
                 $from_date = Carbon::createFromFormat('d/m/Y', $request->from_date);
                 $to_date = Carbon::createFromFormat('d/m/Y', $request->to_date);
                 $query = $query->whereDate('created_at', '>=', $from_date->toDateString());
@@ -115,7 +146,7 @@ class VoiceAudit extends Model
                 $from_date = Carbon::createFromFormat('d/m/Y', $request->start_date);
                 $query = $query->whereDate('created_at', $from_date->toDateString());
             }
-        }
+        } */
 
         return $query;
     }

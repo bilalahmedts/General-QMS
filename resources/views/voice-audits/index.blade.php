@@ -62,6 +62,9 @@
                 if (!empty(@$_GET['review'])) {
                     $review = @$_GET['review'];
                 }
+                if (!empty(@$_GET['from_date'])) {
+                    $from_date = @$_GET['from_date'];
+                }
                 if (!empty(@$_GET['to_date'])) {
                     $to_date = @$_GET['to_date'];
                 }
@@ -124,14 +127,6 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group col-md-4">
-                        <label for="">Select Outcome</label>
-                        <select name="outcome" class="form-control select2">
-                            <option value="">Select</option>
-                            <option value="accepted" @if ($outcome == 'accepted') selected @endif>Accepted</option>
-                            <option value="rejected" @if ($outcome == 'rejected') selected @endif>Rejected</option>
-                        </select>
-                    </div>
 
                     <div class="form-group col-md-4">
                         <label for="">From Date</label>
@@ -144,7 +139,10 @@
                         <input type="text" class="form-control datetimepicker-input datepicker2" name="to_date"
                             value="{{ $to_date }}" data-toggle="datetimepicker" data-target=".datepicker2" />
                     </div>
+                    <div class="form-group col-md-4">
 
+                        <input type="hidden">
+                    </div>
                     <div class="form-group col-md-4">
                         <label for="">From Time</label>
                         <input type="text" class="form-control datetimepicker-input datepicker3" name="from_time"

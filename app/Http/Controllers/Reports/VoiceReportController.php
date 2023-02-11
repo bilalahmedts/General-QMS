@@ -252,7 +252,11 @@ class VoiceReportController extends Controller
         $projects = Project::orderBy('name', 'asc')->get();
         return view('voice-reports.associates')->with(compact('users', 'user_evaluations', 'projects', 'campaigns'));
     }
-
+    public static function getAssociateVCount($associate_id, $rating, $project_id)
+    {
+        $count = VoiceAudit::where('associate_id', $associate_id)->where('rating', $rating)->where('project_id', $project_id)->count();
+        return $count;
+    }
     public function fatals(Request $request)
     {
         $query = new VoiceAudit;

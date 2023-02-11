@@ -181,8 +181,9 @@
                                                     $otherCount = $other[$audit->manager_id][$project->id];
                                                 }
                                             }
+
                                             $total[$audit->manager_id][$project->id]['total_count'] = $aboveAverageCount + $averageCount + $badCount + $fatalCount + $goodCount + $otherCount;
-                                            $percentage = (($total[$audit->manager_id][$project->id]['total_count'])/count($projects) * 100);
+                                            $percentage = $total[$audit->manager_id][$project->id]['total_count'] / count($user_evaluations);
                                             $sum = $percentage + $sum;
                                             $total_manager[$audit->manager_id] = $sum;
                                         }
@@ -239,7 +240,7 @@
                                     @if ($item->campaign->projects)
                                         @foreach ($item->campaign->projects as $project)
                                             <div>
-                                                {{ round(($total[$item->id][$project->id]['total_count'] / count($item->managerVoiceAudits)) * 100) }} %
+                                                {{ round(($total[$item->id][$project->id]['total_count'] / count($user_evaluations))) }} %
                                             </div>
                                         @endforeach
                                     @endif
@@ -247,7 +248,7 @@
                                 <td class="text-center">  
                                     @if ($item->campaign->projects)
                                             <div>
-                                                {{ round(($total_manager[$item->id] / count($item->campaign->projects))) }}
+                                                {{ round(($total_manager[$item->id] / count($project_ids))) }}
                                                 %
                                             </div>
                                         
