@@ -73,8 +73,7 @@ class VoiceAuditController extends Controller
             ->get();
         $projects = Project::orderBy('name', 'asc')->get();
         $associates = User::role('Associate')->where('campaign_id', '!=', 1)->orderBy('name', 'asc')->get();
-        Session::put('data_url', request()->fullUrl());
-        session::get('data_url');
+
         return view('voice-audits.index')->with(compact('voice_evaluation', 'voice_audits', 'users', 'campaigns', 'projects', 'associates'));
     }
 

@@ -95,7 +95,7 @@
                             <input type="text" class="form-control datetimepicker-input datepicker2" name="to_date"
                                 value="{{ $to_date }}" data-toggle="datetimepicker" data-target=".datepicker2" />
                         </div>
-                        
+
                     </div>
                 </div>
                 <div class="card-footer">
@@ -126,9 +126,6 @@
                         <th>Team Lead Name</th>
                         <th>Campaign</th>
                         <th>Project</th>
-                        {{-- @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']))
-                            <th>Count</th>
-                        @endif --}}
                         <th class="text-center">Above Average</th>
                         <th class="text-center">Average</th>
                         <th class="text-center">Bad</th>
@@ -136,9 +133,7 @@
                         <th class="text-center">Good</th>
                         <th class="text-center">QA Percentage</th>
                         <th class="text-center">Overall QA Percentage</th>
-                        @if (
-                            // (in_array(Auth::user()->roles[0]->name, ['Director', 'Manager', 'Team Lead']) && Auth::user()->campaign_id == 1) ||
-                            in_array(Auth::user()->roles[0]->name, ['Super Admin']))
+                        @if (in_array(Auth::user()->roles[0]->name, ['Super Admin']))
                             <th class="action">Action</th>
                         @endif
                     </tr>
@@ -156,14 +151,17 @@
                                 $good = [];
                                 $other = [];
                                 $total = [];
-                                
+                                $qaPercentage = [];
+                                $overallQaPercentage = [];
+                    
                                 $aboveAverageCount = 0;
                                 $averageCount = 0;
                                 $badCount = 0;
                                 $goodCount = 0;
                                 $fatalCount = 0;
                                 $otherCount = 0;
-                                $count = 0;
+                                $qaPercentageCount = 0;
+                                
                                 
                                 if (count($item->teamLeadVoiceAudits) > 0) {
                                     foreach ($item->teamLeadVoiceAudits as $audit) {
@@ -196,11 +194,14 @@
                                                     $other[$audit->team_lead_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getTlvCount($audit->team_lead_id, 'other', $project->id);
                                                     $otherCount = $other[$audit->team_lead_id][$project->id];
                                                 }
+                                                $qaPercentage[$audit->team_lead_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getTlQaScore($audit->team_lead_id, $project->id); 
+                                                $qaPercentageCount = $qaPercentage[$audit->team_lead_id][$project->id];
+                                                $overallQaPercentage[$audit->team_lead_id] = App\Http\Controllers\Reports\VoiceReportController::getTlOverallQaScore($audit->team_lead_id); 
                                             }
-                                            $total[$audit->team_lead_id][$project->id]['total_count'] = $aboveAverageCount + $averageCount + $badCount + $fatalCount + $goodCount + $otherCount;
-                                            $percentage = $total[$audit->team_lead_id][$project->id]['total_count'] / count($user_evaluations);
-                                            $sum = $percentage + $sum;
-                                            $total_tl[$audit->team_lead_id] = $sum;
+                                            // $total[$audit->team_lead_id][$project->id]['total_count'] = $aboveAverageCount + $averageCount + $badCount + $fatalCount + $goodCount + $otherCount;
+                                            // $percentage = $total[$audit->team_lead_id][$project->id]['total_count'] / count($user_evaluations);
+                                            // $sum = $percentage + $sum;
+                                            // $total_tl[$audit->team_lead_id] = $sum;
                                         }
                                     }
                                 }
@@ -216,7 +217,7 @@
                                         @endforeach
                                     @endif
                                 </td>
-                               
+
 
                                 <td class="text-center">
                                     @if ($item->campaign->projects)
@@ -257,7 +258,7 @@
                                     @if ($item->campaign->projects)
                                         @foreach ($item->campaign->projects as $project)
                                             <div>
-                                                {{ round($total[$item->id][$project->id]['total_count'] / count($user_evaluations)) }}
+                                                {{ round($qaPercentage[$item->id][$project->id]) ?? 0 }}
                                                 %
                                             </div>
                                         @endforeach
@@ -266,7 +267,7 @@
                                 <td class="text-center">
                                     @if ($item->campaign->projects)
                                         <div>
-                                            {{ round($total_tl[$item->id] / count($project_ids)) }}
+                                            {{ round($overallQaPercentage[$item->id]) ?? 0 }}
                                             %
                                         </div>
                                     @endif

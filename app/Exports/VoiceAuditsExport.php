@@ -26,17 +26,8 @@ class VoiceAuditsExport implements FromView
 
         $query->with('user', 'associate', 'campaign');
 
-        if(Auth::user()->roles[0]->name == 'Associate' && Auth::user()->campaign_id == 1){
-            $query = $query->where('user_id', Auth::user()->id);
-        }
-        elseif(in_array(Auth::user()->roles[0]->name, ['Team Lead', 'Manager']) && Auth::user()->campaign_id == 1){
-            $query = $query->whereHas('user', function ($query) {
-                $query = $query->where('reporting_to', Auth::user()->id);
-                $query = $query->orWhere('id', Auth::user()->id);
-            });
 
-        }
-        elseif(in_array(Auth::user()->roles[0]->name, ['Team Lead', 'Manager', 'Associate']) && Auth::user()->campaign_id != 1){
+        if(in_array(Auth::user()->roles[0]->name, ['Team Lead', 'Manager', 'Associate']) && Auth::user()->campaign_id != 1){
             abort(403);
         }
 

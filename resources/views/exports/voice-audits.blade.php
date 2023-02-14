@@ -10,6 +10,7 @@
             <th>Associate</th>
             <th>Reporting To</th>
             <th>Campaign</th>
+            <th>Project</th>
             <th>Result</th>
             <th>Rating</th>
             <th>Handling Time</th>
@@ -34,6 +35,7 @@
                 <td>{{ $audit->associate->name ?? '' }}</td>
                 <td>{{ $audit->associate->supervisor->name ?? '' }}</td>
                 <td>{{ $audit->campaign->name ?? '' }}</td>
+                <td>{{ $audit->project->name ?? '' }}</td>
                 <td>{{ $audit->percentage }}</td>
                 <td>
                     @if ($audit->rating == 'good')

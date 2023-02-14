@@ -55,7 +55,7 @@
                     <div class="row">
 
                         <div class="form-group col-md-4">
-                            <label for="">Select Team Lead</label>
+                            <label for="">Select Manager</label>
                             <select name="id" class="form-control select2">
                                 <option value="">Select Option</option>
                                 @foreach ($users as $user)
@@ -142,6 +142,8 @@
                                 $fatal = [];
                                 $good = [];
                                 $other = [];
+                                $qaPercentage = [];
+                                $overallQaPercentage = [];
 
                                 $aboveAverageCount = 0;
                                 $averageCount = 0;
@@ -149,6 +151,7 @@
                                 $goodCount = 0;
                                 $fatalCount = 0;
                                 $otherCount = 0;
+                                $qaPercentageCount = 0;
                                 
                                 if (count($item->managerVoiceAudits) > 0) {
                                     foreach ($item->managerVoiceAudits as $audit) {
@@ -180,12 +183,14 @@
                                                     $other[$audit->manager_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getManagervCount($audit->manager_id, 'other', $project->id);
                                                     $otherCount = $other[$audit->manager_id][$project->id];
                                                 }
+                                                $qaPercentage[$audit->manager_id][$project->id] = App\Http\Controllers\Reports\VoiceReportController::getManagerQaScore($audit->manager_id, $project->id); 
+                                                $qaPercentageCount = $qaPercentage[$audit->manager_id][$project->id];
+                                                $overallQaPercentage[$audit->manager_id] = App\Http\Controllers\Reports\VoiceReportController::getManagerOverallQaScore($audit->manager_id); 
                                             }
-
-                                            $total[$audit->manager_id][$project->id]['total_count'] = $aboveAverageCount + $averageCount + $badCount + $fatalCount + $goodCount + $otherCount;
+                                            /* $total[$audit->manager_id][$project->id]['total_count'] = $aboveAverageCount + $averageCount + $badCount + $fatalCount + $goodCount + $otherCount;
                                             $percentage = $total[$audit->manager_id][$project->id]['total_count'] / count($user_evaluations);
                                             $sum = $percentage + $sum;
-                                            $total_manager[$audit->manager_id] = $sum;
+                                            $total_manager[$audit->manager_id] = $sum; */
                                         }
                                     }
                                 }
@@ -240,6 +245,24 @@
                                     @if ($item->campaign->projects)
                                         @foreach ($item->campaign->projects as $project)
                                             <div>
+                                                {{ round($qaPercentage[$item->id][$project->id]) ?? 0 }}
+                                                %
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if ($item->campaign->projects)
+                                        <div>
+                                            {{ round($overallQaPercentage[$item->id]) ?? 0 }}
+                                            %
+                                        </div>
+                                    @endif
+                                </td>
+                                {{-- <td class="text-center">
+                                    @if ($item->campaign->projects)
+                                        @foreach ($item->campaign->projects as $project)
+                                            <div>
                                                 {{ round(($total[$item->id][$project->id]['total_count'] / count($user_evaluations))) }} %
                                             </div>
                                         @endforeach
@@ -253,7 +276,7 @@
                                             </div>
                                         
                                     @endif
-                                </td>
+                                </td> --}}
                             </tr>
                         @endforeach
                     @else

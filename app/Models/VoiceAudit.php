@@ -95,11 +95,6 @@ class VoiceAudit extends Model
             }
         }
 
-        if ($request->has('outcome')) {
-            if (!empty($request->outcome)) {
-                $query = $query->where('outcome', $request->outcome);
-            }
-        }
         if ($request->has('search_id')) {
             if ($request->search_id > 0) {
                 $query = $query->where('id', $request->search_id);

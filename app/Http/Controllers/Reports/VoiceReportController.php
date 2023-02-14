@@ -9,6 +9,7 @@ use App\Models\Project;
 use App\Models\Campaign;
 use App\Models\VoiceAudit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -170,6 +171,17 @@ class VoiceReportController extends Controller
         $count = VoiceAudit::where('team_lead_id', $team_lead_id)->where('rating', $rating)->where('project_id', $project_id)->count();
         return $count;
     }
+
+    public static function getTlQaScore($team_lead_id, $project_id)
+    {
+        $average = VoiceAudit::where('team_lead_id', $team_lead_id)->where('project_id', $project_id)->avg('percentage');
+        return $average;
+    }
+    public static function getTlOverallQaScore($team_lead_id)
+    {
+        $overallAverage = VoiceAudit::where('team_lead_id', $team_lead_id)->avg('percentage');
+        return $overallAverage;
+    }
     public function managers(Request $request)
     {
         $query = new User;
@@ -212,6 +224,16 @@ class VoiceReportController extends Controller
     {
         $count = VoiceAudit::where('manager_id', $manager_id)->where('rating', $rating)->where('project_id', $project_id)->count();
         return $count;
+    }
+    public static function getManagerQaScore($manager_id, $project_id)
+    {
+        $average = VoiceAudit::where('manager_id', $manager_id)->where('project_id', $project_id)->avg('percentage');
+        return $average;
+    }
+    public static function getManagerOverallQaScore($manager_id)
+    {
+        $overallAverage = VoiceAudit::where('manager_id', $manager_id)->avg('percentage');
+        return $overallAverage;
     }
     public function associates(Request $request)
     {

@@ -44,7 +44,7 @@ class AssociatesExport implements FromView
 
         $query = $query->orderBy('name', 'asc');
 
-        $user_evaluations = $query->paginate(15);
+        $user_evaluations = $query->get();
 
         return view('exports.associates', [
             'user_evaluations' => $user_evaluations
