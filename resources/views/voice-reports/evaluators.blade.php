@@ -28,15 +28,16 @@
                 $to_time = '';
                 
                 if (isset($_GET['search'])) {
-                    $search_id = $_GET['search_id'];
-                
+                    
+                    if (!empty($_GET['search_id'])) {
+                        $search_id = $_GET['search_id'];
+                    }
                     if (!empty($_GET['from_date'])) {
                         $from_date = $_GET['from_date'];
                     }
                     if (!empty($_GET['to_date'])) {
                         $to_date = $_GET['to_date'];
                     }
-                
                     if (!empty($_GET['from_time'])) {
                         $from_time = $_GET['from_time'];
                     }
