@@ -26,12 +26,10 @@ class VoiceAuditRequest extends FormRequest
         $rules = [
             'voice_evaluation_id' => 'required',
             'associate_id' => 'required',
-
-            'call_date' => 'required',
+ 
             'percentage' => 'required',
             'customer_name' => 'required',
-            'customer_phone' => 'required|regex:/^[]{0,1}[0-9]{1,4}[]{0,1}[\s\.\0-9]*$/',
-            'recording_duration' => 'required',
+            'customer_phone' => 'required|regex:/^[]{0,1}[0-9]{1,4}[]{0,1}[\s\.\0-9]*$/', 
 
         ];
 

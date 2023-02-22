@@ -56,7 +56,8 @@ class VoiceEvaluationController extends Controller
      */
     public function show(VoiceEvaluation $voice_evaluation)
     {
-        $categories = DatapointCategory::where('voice_evaluation_id', $voice_evaluation->id)->where('status', 'active')->sortable(['sort', 'desc'])->with('datapoints')->paginate(15);
+        $categories = DatapointCategory::where('voice_evaluation_id', $voice_evaluation->id)->where('status', 'active')->orderBy('id', 'desc')
+        ->with('datapoints')->paginate(15);
         return view('voice-evaluations.show')->with(compact('voice_evaluation', 'categories'));
     }
 

@@ -205,9 +205,9 @@
                         <th>@sortablelink('campaign_id', 'Campaign')</th>
                         <th>@sortablelink('project_id', 'Project')</th>
                         <th>Evaluation Time</th>
-                        <th>Call Time</th>
-                        <th>Result</th>
+                        <th>Call Time</th>                        
                         <th>Rating</th>
+                        <th>Result</th>
                         <th>Status</th>
                         <th>Call Type</th>
                         <th>@sortablelink('created_at', 'Created Time')</th>
@@ -229,7 +229,6 @@
                                 <td>{{ $audit->project->name ?? '' }}</td>
                                 <td>{{ $audit->evaluation_time }}</td>
                                 <td>{{ $audit->recording_duration }}</td>
-                                <td>{{ $audit->percentage }}%</td>
                                 <td>
                                     @if ($audit->rating == 'good')
                                         <span class="badge bg-success">Good</span>
@@ -245,6 +244,7 @@
                                         <span class="badge bg-secondary">Other</span>
                                     @endif
                                 </td>
+                                <td>{{ $audit->percentage }}%</td>
                                 <td>
                                     @include('shared.voice-audit-status', ['status' => $audit->status])
                                 </td>
