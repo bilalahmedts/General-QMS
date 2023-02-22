@@ -16,9 +16,58 @@ class VoiceAudit extends Model
 {
     use HasFactory, SoftDeletes, HasRelationships, BelongsToThrough, HasEagerLimit, Sortable;
 
-    protected $fillable = ['voice_evaluation_id', 'user_id', 'associate_id', 'team_lead_id', 'call_date', 'percentage', 'customer_name', 'customer_phone', 'record_id', 'recording_duration', 'recording_link', 'outcome', 'lead_status', 'notes', 'call_type', 'campaign_id', 'project_id', 'review_priority', 'rating', 'status', 'client_status', 'evaluation_time', 'communication', 'sales', 'compliance', 'customer_service', 'product_presentation'];
+    protected $fillable = [
+        'voice_evaluation_id', 
+        'user_id', 'associate_id', 
+        'team_lead_id', 'call_date', 
+        'percentage', 
+        'customer_name',
+        'customer_phone',
+        'record_id', 
+        'recording_duration',
+        'recording_link', 
+        'outcome', 
+        'lead_status', 
+        'notes', 
+        'call_type', 
+        'campaign_id', 
+        'project_id', 
+        'review_priority', 
+        'rating', 
+        'status', 
+        'client_status', 
+        'evaluation_time', 
+        'communication', 
+        'sales', 
+        'compliance', 
+        'customer_service', 
+        'product_presentation',
+        'ast_clid',
+        'caller',
+        'agent_group',
+        'queue',
+        'start_time',
+        'customer_rating',
+        'customer_feedback',
+        'ticket_number',
+        'date_of_chat_email',
+        'audit_date',
+        'ast_clid'
+    ];
 
-    public $sortable = ['id', 'user_id', 'associate_id', 'call_date', 'customer_name', 'customer_phone', 'outcome', 'billable_status', 'status', 'evaluation_time', 'created_at', 'updated_at'];
+    public $sortable = ['id', 
+    'user_id', 
+    'customer_rating',
+    'associate_id', 
+    'call_date', 
+    'customer_name', 
+    'customer_phone', 
+    'outcome', 
+    'billable_status', 
+    'status', 
+    'evaluation_time', 
+    'created_at', 
+    'updated_at'];
 
     public function getCallDateAttribute($value)
     {
