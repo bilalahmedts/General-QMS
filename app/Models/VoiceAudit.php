@@ -56,18 +56,20 @@ class VoiceAudit extends Model
     ];
 
     public $sortable = ['id', 
-    'user_id', 
-    'customer_rating',
-    'associate_id', 
-    'call_date', 
-    'customer_name', 
-    'customer_phone', 
-    'outcome', 
-    'billable_status', 
-    'status', 
-    'evaluation_time', 
-    'created_at', 
-    'updated_at'];
+        'user_id', 
+        'campaign_id',
+        'customer_rating',
+        'associate_id', 
+        'call_date', 
+        'customer_name', 
+        'customer_phone', 
+        'outcome', 
+        'billable_status', 
+        'status', 
+        'evaluation_time', 
+        'created_at', 
+        'updated_at'
+    ];
 
     public function getCallDateAttribute($value)
     {

@@ -53,37 +53,38 @@
             <div class="validate-error">{{ $message }}</div>
         @enderror
     </div>
-
-    <div class="col-md-4">
-        <div class="form-group">
-            <label for=""> Date Of Chat/Email <span>*</span></label>
-            <input type="text" class="form-control datetimepicker-input datepicker" name="date_of_chat_email"
-                data-toggle="datetimepicker" data-target=".datepicker" value="{{ $voice_audit->date_of_chat_email }}"
-                required>
+    @if ($voice_audit->project->id == "6" || $voice_audit->project->id == "7" )
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for=""> Date Of Chat/Email <span>*</span></label>
+                <input type="text" class="form-control datetimepicker-input datepicker" name="date_of_chat_email"
+                    data-toggle="datetimepicker" data-target=".datepicker" value="{{ $voice_audit->date_of_chat_email }}"
+                    required>
+            </div>
+            @error('date_of_chat_email')
+                <div class="validate-error">{{ $message }}</div>
+            @enderror
         </div>
-        @error('date_of_chat_email')
-            <div class="validate-error">{{ $message }}</div>
-        @enderror
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <label for=""> Audit Date <span>*</span></label>
-            <input type="date" class="form-control " name="audit_date"  value="{{ $voice_audit->audit_date }}"
-                required>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for=""> Audit Date <span>*</span></label>
+                <input type="date" class="form-control " name="audit_date"  value="{{ $voice_audit->audit_date }}"
+                    required>
+            </div>
+            @error('audit_date')
+                <div class="validate-error">{{ $message }}</div>
+            @enderror
         </div>
-        @error('audit_date')
-            <div class="validate-error">{{ $message }}</div>
-        @enderror
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <label for=""> Ticket Number <span>*</span></label>
-            <input type="text" class="form-control" name="ticket_number" placeholder="Ticket #" value="{{ $voice_audit->ticket_number }}" required>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for=""> Ticket Number <span>*</span></label>
+                <input type="text" class="form-control" name="ticket_number" placeholder="Ticket #" value="{{ $voice_audit->ticket_number }}" required>
+            </div>
+            @error('ticket_number')
+                <div class="validate-error">{{ $message }}</div>
+            @enderror
         </div>
-        @error('ticket_number')
-            <div class="validate-error">{{ $message }}</div>
-        @enderror
-    </div>
+    @endif
     @if ($voice_audit->project->id == "8" )
         
     

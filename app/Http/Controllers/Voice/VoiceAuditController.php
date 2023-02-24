@@ -74,8 +74,10 @@ class VoiceAuditController extends Controller
             ->get();
         $projects = Project::orderBy('name', 'asc')->where('evaluation_type_id',$voice_evaluation->id)->get();
         $associates = User::role('Associate')->where('campaign_id', '!=', 1)->orderBy('name', 'asc')->get();
-
-        return view('voice-audits.index')->with(compact('voice_evaluation', 'voice_audits', 'users', 'campaigns', 'projects', 'associates'));
+        if($voice_evaluation->id=="1" )
+            return view('voice-audits.index')->with(compact('voice_evaluation', 'voice_audits', 'users', 'campaigns', 'projects', 'associates'));
+        else
+            return view('pci-audits.index')->with(compact('voice_evaluation', 'voice_audits', 'users', 'campaigns', 'projects', 'associates'));
     }
 
     public function create(Request $request, VoiceEvaluation $voice_evaluation)
