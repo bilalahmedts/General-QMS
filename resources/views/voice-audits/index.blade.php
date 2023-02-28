@@ -220,7 +220,7 @@
                     @if (count($voice_audits) > 0)
 
                         @foreach ($voice_audits as $key => $audit)
-                            <tr>
+                            <tr @if($audit->tl_edit_status==1) style="background:lightblue;"@endif>
                                 <td>{{ $voice_audits->firstItem() + $key }}</td>
                                 <td>{{ $audit->user->name ?? 'undefined' }}</td>
                                 <td>{{ $audit->associate->name ?? 'undefined' }}</td>
@@ -278,7 +278,9 @@
                                             <a href="{{ route('voice-audits.edit', $audit) }}"
                                                 class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
                                         @endif
-
+                                        @if (Auth::user()->roles[0]->name == 'Super Admin' || Auth::user()->roles[0]->name == 'Director')
+                                            <a href="{{route('editRequest',$audit)}}" class="btn btn-warning btn-sm"><i class="fas fa-adjust"></i></a>
+                                        @endif
                                         @if (Auth::user()->roles[0]->name == 'Super Admin')
                                             <form action="{{ route('voice-audits.destroy', $audit) }}" method="post">
                                                 @csrf

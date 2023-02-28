@@ -6,6 +6,7 @@ use App\Models\Campaign;
 use App\Models\Datapoint;
 use App\Models\VoiceAudit;
 use App\Models\VoiceAuditPoint;
+use App\Models\EditAuditPoints;
 use App\Models\VoiceAuditAppeal;
 use App\Models\DatapointCategory;
 use Illuminate\Support\Facades\Auth;
@@ -35,6 +36,26 @@ class VoiceAuditService
                 }
             }
         }
+    }
+    public function EditAuditPoints($request, $voice_audit)
+    { 
+        foreach ($request->all() as $key => $item) {
+            $key = explode('-', $key);
+
+            if (count($key) > 1) {
+                if ($key[0] == 'answer') {
+                    $datapoint = \DB::table('voice_audit_points')->where('id',$key[1])->first();
+                    EditAuditPoints::create([
+                        'voice_audit_id' => $voice_audit->id,
+                        'datapoint_category_id' => $datapoint->datapoint_category_id,
+                        'datapoint_id' => $datapoint->id,
+                        'answer' => $item,
+                    ]);
+                }
+            }
+        }
+        $voice_audit->tl_edit_status=1;
+        $voice_audit->save();
     }
 
     // insert audit data points

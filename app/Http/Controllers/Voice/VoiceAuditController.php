@@ -10,6 +10,7 @@ use App\Traits\UserTrait;
 use App\Models\VoiceAudit;
 use Illuminate\Http\Request;
 use App\Models\VoiceEvaluation;
+use App\Models\EditVoiceAudit;
 use App\Models\DatapointCategory;
 use App\Services\VoiceAuditService;
 use App\Http\Controllers\Controller;
@@ -175,17 +176,28 @@ class VoiceAuditController extends Controller
             ]);
         }        
 
-        $this->voiceAuditService->updateAuditPoints($request, $voice_audit);
+        if(Auth::user()->hasRole('Team Lead')){ 
+            $request->merge([
+                'audit_id' => $voice_audit->id,
+                'user_id' => Auth::user()->id,
+            ]);
+            $edit_voice_audit = new EditVoiceAudit;
+            $edit_voice_audit->create($request->all());
+            $this->voiceAuditService->EditAuditPoints($request, $voice_audit);
 
-        $voice_audit->update($request->all());
+        }else{
 
-        $appeal = $this->voiceAuditService->updateAppeal($voice_audit);
-
-        if ($appeal) {
-            return redirect()
-                ->back()
-                ->with('success', 'Appeal accepted & Evaluation updated successfully!');
+            $this->voiceAuditService->updateAuditPoints($request, $voice_audit);
+            $voice_audit->update($request->all());
+            $appeal = $this->voiceAuditService->updateAppeal($voice_audit);
+            if ($appeal) {
+                return redirect()
+                    ->back()
+                    ->with('success', 'Appeal accepted & Evaluation updated successfully!');
+            }
+            
         }
+        
 
         return redirect()
             ->back()
@@ -200,5 +212,19 @@ class VoiceAuditController extends Controller
         return redirect()
             ->back()
             ->with('success', 'Voice Audit deleted successfully!');
+    }
+
+    public function editRequest(VoiceAudit $voice_audit)
+    {
+        $categories = $this->voiceAuditService->getAuditCategories($voice_audit); 
+        $voice_evaluation = VoiceEvaluation::findOrFail($voice_audit->voice_evaluation_id); 
+
+        $edit_request_audit = EditVoiceAudit::where('audit_id',$voice_audit->id)->first();
+
+        return view('voice-audits.edit_request')->with(compact('voice_audit', 'categories', 'voice_evaluation','edit_request_audit')); 
+    }
+
+    public function updateEditRequest(VoiceAudit $voice_audit) { 
+        return \Redirect::route('voice-audits.index', [$id=1])->with('message', 'State saved correctly!!!');        
     }
 }
