@@ -51,6 +51,9 @@ Route::middleware('auth')->group(function () {
         ->name('voice-audits.show');
     Route::resource('/voice-audits', VoiceAuditController::class)->except(['create', 'index', 'show']);
 
+    Route::get('/editRequest/{voice_audit}', [VoiceAuditController::class, 'editRequest'])->name('editRequest');
+    Route::get('/updateEditRequest/{voice_audit}', [VoiceAuditController::class, 'updateEditRequest'])->name('updateEditRequest');
+
     // voice audit appeals
     Route::prefix('voice-audit-appeals')
         ->get('/', [VoiceAuditAppealController::class, 'index'])

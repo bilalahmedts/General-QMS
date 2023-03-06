@@ -25,6 +25,7 @@ class AddColumnsToVoiceAudits extends Migration
             $table->string('agent_group',100)->default(0);
             $table->string('caller',100)->default(0);
             $table->string('ast_clid',100)->default(0);
+            $table->string('tl_edit_status',2)->default(0);
         });
     }
 

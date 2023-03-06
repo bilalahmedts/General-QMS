@@ -12,12 +12,13 @@ use Staudenmeir\EloquentHasManyDeep\HasEagerLimit;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class VoiceAudit extends Model
+class EditVoiceAudit extends Model
 {
     use HasFactory, SoftDeletes, HasRelationships, BelongsToThrough, HasEagerLimit, Sortable;
 
     protected $fillable = [
         'voice_evaluation_id', 
+        'audit_id',
         'user_id', 'associate_id', 
         'team_lead_id', 'call_date', 
         'percentage', 
@@ -70,7 +71,7 @@ class VoiceAudit extends Model
         'created_at', 
         'updated_at'
     ];
-
+    protected $table = "edit_voice_audits";
     public function getCallDateAttribute($value)
     {
         $call_date = Carbon::parse($value);
